@@ -20,6 +20,7 @@ use ::libc::{c_void, size_t, c_char};
 
 use ::util::{path_to_c, name_to_c, allocate_loop};
 
+#[derive(Clone)]
 pub struct XAttrs {
     data: Box<[u8]>,
     offset: usize,

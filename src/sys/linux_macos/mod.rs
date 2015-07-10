@@ -37,7 +37,7 @@ impl Clone for XAttrs {
         self.offset = other.offset;
 
         let mut data = mem::replace(&mut self.data, Box::new([])).into_vec();
-        data.extend(&*other.data);
+        data.extend(other.data.iter().cloned());
         self.data = data.into_boxed_slice();
     }
 }

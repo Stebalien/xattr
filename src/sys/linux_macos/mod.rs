@@ -15,15 +15,31 @@ use std::ffi::{OsStr, OsString};
 use std::os::unix::io::RawFd;
 use std::os::unix::ffi::{OsStrExt};
 use std::path::Path;
+use std::mem;
 
 use ::libc::{c_void, size_t, c_char};
 
 use ::util::{path_to_c, name_to_c, allocate_loop};
 
-#[derive(Clone)]
 pub struct XAttrs {
     data: Box<[u8]>,
     offset: usize,
+}
+
+impl Clone for XAttrs {
+    fn clone(&self) -> Self {
+        XAttrs {
+            data: Vec::from(&*self.data).into_boxed_slice(),
+            offset: self.offset
+        }
+    }
+    fn clone_from(&mut self, other: &XAttrs) {
+        self.offset = other.offset;
+
+        let mut data = mem::replace(&mut self.data, Box::new([])).into_vec();
+        data.extend(&*other.data);
+        self.data = data.into_boxed_slice();
+    }
 }
 
 // Yes, I could avoid these allocations on linux/macos. However, if we ever want to be freebsd

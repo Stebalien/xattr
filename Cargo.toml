@@ -1,0 +1,10 @@
+[package]
+name = "xattr"
+version = "0.1.0"
+authors = ["Steven Allen <steven@stebalien.com>"]
+
+[dependencies]
+libc = "*"
+
+[dev-dependencies]
+tempfile = "*"

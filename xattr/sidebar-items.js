@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["get","Get an extended attribute for the specified file."],["list","List extended attributes attached to the specified file."],["remove","Remove an extended attribute from the specified file."],["set","Set an extended attribute on the specified file."]],"struct":[["XAttrs",""]],"trait":[["FileExt",""]]});

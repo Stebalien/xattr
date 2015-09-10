@@ -1,3 +1,6 @@
+//! Manage extended attributes.
+//!
+//! Note: This library *does not* follow symlinks.
 extern crate libc;
 
 mod sys;

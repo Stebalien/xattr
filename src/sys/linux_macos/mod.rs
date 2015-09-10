@@ -53,7 +53,7 @@ impl Iterator for XAttrs {
             None
         } else {
             let end = data.iter().position(|&b| b == 0u8).unwrap(); // always null terminated (unless empty).
-            self.offset = end + 1;
+            self.offset += end + 1;
             Some(OsStr::from_bytes(&data[..end]).to_owned())
         }
     }

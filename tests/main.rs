@@ -1,6 +1,8 @@
 extern crate xattr;
 extern crate tempfile;
 
+use std::collections::BTreeSet;
+use std::ffi::OsStr;
 use xattr::FileExt;
 
 use tempfile::NamedTempFile;
@@ -44,13 +46,17 @@ fn test_path() {
 fn test_multi() {
     // Only works on "real" filesystems.
     let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
+    let mut items: BTreeSet<_> = [
+        OsStr::new("user.test1"),
+        OsStr::new("user.test2"),
+        OsStr::new("user.test3")
+    ].iter().cloned().collect();
 
-    xattr::set(tmp.path(), "user.test1", b"first").unwrap();
-    xattr::set(tmp.path(), "user.test2", b"second").unwrap();
-    xattr::set(tmp.path(), "user.test3", b"third").unwrap();
-    let mut attrs = xattr::list(tmp.path()).unwrap();
-    assert_eq!(&attrs.next().unwrap(), "user.test1");
-    assert_eq!(&attrs.next().unwrap(), "user.test2");
-    assert_eq!(&attrs.next().unwrap(), "user.test3");
-    assert_eq!(attrs.next(), None);
+    for it in &items {
+        xattr::set(tmp.path(), it, b"value").unwrap();
+    }
+    for it in xattr::list(tmp.path()).unwrap() {
+        assert!(items.remove(&*it));
+    }
+    assert!(items.is_empty());
 }

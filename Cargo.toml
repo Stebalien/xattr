@@ -1,6 +1,6 @@
 [package]
 name = "xattr"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Steven Allen <steven@stebalien.com>"]
 description = "unix extended filesystem attributes"
 

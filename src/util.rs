@@ -7,6 +7,7 @@ use std::path::Path;
 
 use ::libc::{ERANGE, ssize_t};
 
+#[allow(dead_code)]
 pub fn name_to_c(name: &OsStr) -> io::Result<CString> {
     match CString::new(name.as_bytes()) {
         Ok(name) => Ok(name),

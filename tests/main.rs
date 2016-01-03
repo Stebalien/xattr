@@ -8,7 +8,7 @@ use xattr::FileExt;
 use tempfile::NamedTempFile;
 
 #[test]
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn test_fd() {
     // Only works on "real" filesystems.
     let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
@@ -25,7 +25,7 @@ fn test_fd() {
 }
 
 #[test]
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn test_path() {
     // Only works on "real" filesystems.
     let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
@@ -42,7 +42,7 @@ fn test_path() {
 }
 
 #[test]
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn test_multi() {
     // Only works on "real" filesystems.
     let tmp = NamedTempFile::new_in("/var/tmp").unwrap();

@@ -5,20 +5,23 @@ use std::ptr;
 use std::ffi::CString;
 use std::path::Path;
 
-use ::libc::{ERANGE, ssize_t};
+use libc::{ERANGE, ssize_t};
 
 #[allow(dead_code)]
 pub fn name_to_c(name: &OsStr) -> io::Result<CString> {
     match CString::new(name.as_bytes()) {
         Ok(name) => Ok(name),
-        Err(_) => Err(io::Error::new(io::ErrorKind::InvalidInput, "name must not contain null bytes"))
+        Err(_) => {
+            Err(io::Error::new(io::ErrorKind::InvalidInput,
+                               "name must not contain null bytes"))
+        }
     }
 }
 
 pub fn path_to_c(path: &Path) -> io::Result<CString> {
     match CString::new(path.as_os_str().as_bytes()) {
         Ok(name) => Ok(name),
-        Err(_) => Err(io::Error::new(io::ErrorKind::NotFound , "file not found"))
+        Err(_) => Err(io::Error::new(io::ErrorKind::NotFound, "file not found")),
     }
 }
 
@@ -50,4 +53,3 @@ pub unsafe fn allocate_loop<F: FnMut(*mut u8, usize) -> ssize_t>(mut f: F) -> io
     Ok(vec)
 
 }
-

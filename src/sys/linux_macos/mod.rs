@@ -13,13 +13,13 @@ use self::macos::*;
 use std::io;
 use std::ffi::{OsStr, OsString};
 use std::os::unix::io::RawFd;
-use std::os::unix::ffi::{OsStrExt};
+use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 use std::mem;
 
-use ::libc::{c_void, size_t, c_char};
+use libc::{c_void, size_t, c_char};
 
-use ::util::{path_to_c, name_to_c, allocate_loop};
+use util::{path_to_c, name_to_c, allocate_loop};
 
 pub struct XAttrs {
     data: Box<[u8]>,
@@ -30,7 +30,7 @@ impl Clone for XAttrs {
     fn clone(&self) -> Self {
         XAttrs {
             data: Vec::from(&*self.data).into_boxed_slice(),
-            offset: self.offset
+            offset: self.offset,
         }
     }
     fn clone_from(&mut self, other: &XAttrs) {
@@ -52,7 +52,8 @@ impl Iterator for XAttrs {
         if data.is_empty() {
             None
         } else {
-            let end = data.iter().position(|&b| b == 0u8).unwrap(); // always null terminated (unless empty).
+            // always null terminated (unless empty).
+            let end = data.iter().position(|&b| b == 0u8).unwrap();
             self.offset += end + 1;
             Some(OsStr::from_bytes(&data[..end]).to_owned())
         }
@@ -63,7 +64,7 @@ impl Iterator for XAttrs {
             (0, Some(0))
         } else {
             (1, None)
-        } 
+        }
     }
 }
 
@@ -77,11 +78,10 @@ pub fn get_fd(fd: RawFd, name: &OsStr) -> io::Result<Vec<u8>> {
 pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
     let name = try!(name_to_c(name));
     let ret = unsafe {
-        fsetxattr(
-            fd,
-            name.as_ptr(),
-            value.as_ptr() as *const c_void,
-            value.len() as size_t)
+        fsetxattr(fd,
+                  name.as_ptr(),
+                  value.as_ptr() as *const c_void,
+                  value.len() as size_t)
     };
     if ret != 0 {
         Err(io::Error::last_os_error())
@@ -116,7 +116,12 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
     let name = try!(name_to_c(name));
     let path = try!(path_to_c(path));
     unsafe {
-        allocate_loop(|buf, len| lgetxattr(path.as_ptr(), name.as_ptr(), buf as *mut c_void, len as size_t))
+        allocate_loop(|buf, len| {
+            lgetxattr(path.as_ptr(),
+                      name.as_ptr(),
+                      buf as *mut c_void,
+                      len as size_t)
+        })
     }
 }
 
@@ -124,11 +129,10 @@ pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
     let name = try!(name_to_c(name));
     let path = try!(path_to_c(path));
     let ret = unsafe {
-        lsetxattr(
-            path.as_ptr(),
-            name.as_ptr(),
-            value.as_ptr() as *const c_void,
-            value.len() as size_t)
+        lsetxattr(path.as_ptr(),
+                  name.as_ptr(),
+                  value.as_ptr() as *const c_void,
+                  value.len() as size_t)
     };
     if ret != 0 {
         Err(io::Error::last_os_error())
@@ -158,4 +162,3 @@ pub fn list_path(path: &Path) -> io::Result<XAttrs> {
         offset: 0,
     })
 }
-

@@ -15,7 +15,7 @@ use std::path::Path;
 pub use sys::XAttrs;
 
 /// Get an extended attribute for the specified file.
-pub fn get<N, P>(path: P, name: N) -> io::Result<Vec<u8>> 
+pub fn get<N, P>(path: P, name: N) -> io::Result<Vec<u8>>
     where P: AsRef<Path>,
           N: AsRef<OsStr>
 {
@@ -23,7 +23,7 @@ pub fn get<N, P>(path: P, name: N) -> io::Result<Vec<u8>>
 }
 
 /// Set an extended attribute on the specified file.
-pub fn set<N, P>(path: P, name: N, value: &[u8]) -> io::Result<()> 
+pub fn set<N, P>(path: P, name: N, value: &[u8]) -> io::Result<()>
     where P: AsRef<Path>,
           N: AsRef<OsStr>
 {
@@ -31,7 +31,7 @@ pub fn set<N, P>(path: P, name: N, value: &[u8]) -> io::Result<()>
 }
 
 /// Remove an extended attribute from the specified file.
-pub fn remove<N, P>(path: P, name: N) -> io::Result<()> 
+pub fn remove<N, P>(path: P, name: N) -> io::Result<()>
     where P: AsRef<Path>,
           N: AsRef<OsStr>
 {
@@ -50,21 +50,21 @@ pub fn list<P>(path: P) -> io::Result<XAttrs>
 
 pub trait FileExt: AsRawFd {
     /// Get an extended attribute for the specified file.
-    fn get_xattr<N>(&self, name: N) -> io::Result<Vec<u8>> 
+    fn get_xattr<N>(&self, name: N) -> io::Result<Vec<u8>>
         where N: AsRef<OsStr>
     {
         sys::get_fd(self.as_raw_fd(), name.as_ref())
     }
 
     /// Set an extended attribute on the specified file.
-    fn set_xattr<N>(&self, name: N, value: &[u8]) -> io::Result<()> 
+    fn set_xattr<N>(&self, name: N, value: &[u8]) -> io::Result<()>
         where N: AsRef<OsStr>
     {
         sys::set_fd(self.as_raw_fd(), name.as_ref(), value)
     }
 
     /// Remove an extended attribute from the specified file.
-    fn remove_xattr<N>(&self, name: N) -> io::Result<()> 
+    fn remove_xattr<N>(&self, name: N) -> io::Result<()>
         where N: AsRef<OsStr>
     {
         sys::remove_fd(self.as_raw_fd(), name.as_ref())
@@ -79,4 +79,4 @@ pub trait FileExt: AsRawFd {
     }
 }
 
-impl FileExt for File { }
+impl FileExt for File {}

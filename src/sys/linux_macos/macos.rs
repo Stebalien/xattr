@@ -1,4 +1,4 @@
-use ::libc::{c_char, ssize_t, size_t, c_int, c_void, uint32_t};
+use libc::{c_char, ssize_t, size_t, c_int, c_void, uint32_t};
 
 const XATTR_NOFOLLOW: c_int = 0x0001;
 
@@ -11,17 +11,37 @@ pub unsafe fn fremovexattr(fd: c_int, name: *const c_char) -> c_int {
 }
 
 #[inline(always)]
-pub unsafe fn fsetxattr(fd: c_int, name: *const c_char, value: *const c_void, size: size_t) -> ssize_t {
+pub unsafe fn fsetxattr(fd: c_int,
+                        name: *const c_char,
+                        value: *const c_void,
+                        size: size_t)
+                        -> ssize_t {
     extern "C" {
-        fn fsetxattr(fd: c_int, name: *const c_char, value: *const c_void, size: size_t, position: uint32_t, options: c_int) -> ssize_t;
+        fn fsetxattr(fd: c_int,
+                     name: *const c_char,
+                     value: *const c_void,
+                     size: size_t,
+                     position: uint32_t,
+                     options: c_int)
+                     -> ssize_t;
     }
     fsetxattr(fd, name, value, size, 0, 0)
 }
 
 #[inline(always)]
-pub unsafe fn fgetxattr(fd: c_int, name: *const c_char, value: *mut c_void, size: size_t) -> ssize_t {
+pub unsafe fn fgetxattr(fd: c_int,
+                        name: *const c_char,
+                        value: *mut c_void,
+                        size: size_t)
+                        -> ssize_t {
     extern "C" {
-        fn fgetxattr(fd: c_int, name: *const c_char, value: *mut c_void, size: size_t, position: uint32_t, options: c_int) -> ssize_t;
+        fn fgetxattr(fd: c_int,
+                     name: *const c_char,
+                     value: *mut c_void,
+                     size: size_t,
+                     position: uint32_t,
+                     options: c_int)
+                     -> ssize_t;
     }
     fgetxattr(fd, name, value, size, 0, 0)
 }
@@ -43,17 +63,37 @@ pub unsafe fn lremovexattr(path: *const c_char, name: *const c_char) -> c_int {
 }
 
 #[inline(always)]
-pub unsafe fn lsetxattr(path: *const c_char, name: *const c_char, value: *const c_void, size: size_t) -> ssize_t {
+pub unsafe fn lsetxattr(path: *const c_char,
+                        name: *const c_char,
+                        value: *const c_void,
+                        size: size_t)
+                        -> ssize_t {
     extern "C" {
-        fn setxattr(path: *const c_char, name: *const c_char, value: *const c_void, size: size_t, position: uint32_t, options: c_int) -> ssize_t;
+        fn setxattr(path: *const c_char,
+                    name: *const c_char,
+                    value: *const c_void,
+                    size: size_t,
+                    position: uint32_t,
+                    options: c_int)
+                    -> ssize_t;
     }
     setxattr(path, name, value, size, 0, XATTR_NOFOLLOW)
 }
 
 #[inline(always)]
-pub unsafe fn lgetxattr(path: *const c_char, name: *const c_char, value: *mut c_void, size: size_t) -> ssize_t {
+pub unsafe fn lgetxattr(path: *const c_char,
+                        name: *const c_char,
+                        value: *mut c_void,
+                        size: size_t)
+                        -> ssize_t {
     extern "C" {
-        fn getxattr(path: *const c_char, name: *const c_char, value: *mut c_void, size: size_t, position: uint32_t, options: c_int) -> ssize_t;
+        fn getxattr(path: *const c_char,
+                    name: *const c_char,
+                    value: *mut c_void,
+                    size: size_t,
+                    position: uint32_t,
+                    options: c_int)
+                    -> ssize_t;
     }
     getxattr(path, name, value, size, 0, XATTR_NOFOLLOW)
 }
@@ -61,7 +101,11 @@ pub unsafe fn lgetxattr(path: *const c_char, name: *const c_char, value: *mut c_
 #[inline(always)]
 pub unsafe fn llistxattr(path: *const c_char, buf: *mut c_char, size: size_t) -> ssize_t {
     extern "C" {
-        fn listxattr(path: *const c_char, buf: *mut c_char, size: size_t, options: c_int) -> ssize_t;
+        fn listxattr(path: *const c_char,
+                     buf: *mut c_char,
+                     size: size_t,
+                     options: c_int)
+                     -> ssize_t;
     }
     listxattr(path, buf, size, XATTR_NOFOLLOW)
 }

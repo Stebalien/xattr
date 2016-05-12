@@ -5,13 +5,13 @@ use std::collections::BTreeSet;
 use std::ffi::OsStr;
 use xattr::FileExt;
 
-use tempfile::NamedTempFile;
+use tempfile::{tempfile_in, NamedTempFile};
 
 #[test]
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn test_fd() {
     // Only works on "real" filesystems.
-    let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
+    let tmp = tempfile_in("/var/tmp").unwrap();
     assert!(tmp.get_xattr("user.test").is_err());
     assert_eq!(tmp.list_xattr().unwrap().next(), None);
 
@@ -45,7 +45,7 @@ fn test_path() {
 #[cfg(any(target_os = "linux", target_os = "freebsd"))]
 fn test_multi() {
     // Only works on "real" filesystems.
-    let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
+    let tmp = tempfile_in("/var/tmp").unwrap();
     let mut items: BTreeSet<_> = [
         OsStr::new("user.test1"),
         OsStr::new("user.test2"),
@@ -53,9 +53,9 @@ fn test_multi() {
     ].iter().cloned().collect();
 
     for it in &items {
-        xattr::set(tmp.path(), it, b"value").unwrap();
+        tmp.set_xattr(it, b"value").unwrap();
     }
-    for it in xattr::list(tmp.path()).unwrap() {
+    for it in tmp.list_xattr().unwrap() {
         assert!(items.remove(&*it));
     }
     assert!(items.is_empty());

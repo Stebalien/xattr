@@ -104,7 +104,6 @@ pub fn list_fd(fd: RawFd) -> io::Result<XAttrs> {
     let vec = unsafe {
         try!(allocate_loop(|buf, len| flistxattr(fd, buf as *mut c_char, len as size_t)))
     };
-    println!("{:?}", vec);
     Ok(XAttrs {
         data: vec.into_boxed_slice(),
         offset: 0,

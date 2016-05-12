@@ -1,6 +1,6 @@
 [package]
 name = "xattr"
-version = "0.1.6"
+version = "0.1.7"
 authors = ["Steven Allen <steven@stebalien.com>"]
 description = "unix extended filesystem attributes"
 
@@ -13,4 +13,4 @@ license = "MIT/Apache-2.0"
 libc = "0.2"
 
 [dev-dependencies]
-tempfile = "*"
+tempfile = "2"

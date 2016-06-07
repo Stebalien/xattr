@@ -265,6 +265,10 @@ nav.sub {
 .docblock h2 { font-size: 1.15em; }
 .docblock h3, .docblock h4, .docblock h5 { font-size: 1em; }
 
+.docblock {
+    margin-left: 24px;
+}
+
 .content .out-of-band {
     font-size: 23px;
     margin: 0px;
@@ -472,7 +476,7 @@ body.blur > :not(#help) {
     background: #e9e9e9;
     box-shadow: 0 0 6px rgba(0,0,0,.2);
     width: 550px;
-    height: 300px;
+    height: 330px;
     border: 1px solid #bfbfbf;
 }
 #help dt {
@@ -632,6 +636,31 @@ a.test-arrow {
 .since + .srclink {
     display: table-cell;
     padding-left: 10px;
+}
+
+span.since {
+    position: initial;
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.enum > .toggle-wrapper > .collapse-toggle, .struct > .toggle-wrapper > .collapse-toggle {
+    left: 0;
+    margin-top: 5px;
+}
+
+.enum > .toggle-wrapper + .docblock, .struct > .toggle-wrapper + .docblock {
+    margin-left: 30px;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.enum > .collapsed, .struct > .collapsed {
+    margin-bottom: 25px;
+}
+
+:target > code {
+   background: #FDFFD3;
 }
 
 /* Media Queries */

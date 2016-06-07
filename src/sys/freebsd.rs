@@ -11,9 +11,8 @@ use util::{path_to_c, allocate_loop};
 
 const EXTATTR_NAMESPACE_USER_STRING: &'static str = "user";
 const EXTATTR_NAMESPACE_SYSTEM_STRING: &'static str = "system";
-const EXTATTR_NAMESPACE_NAMES: [&'static str; 3] = ["empty",
-                                                    EXTATTR_NAMESPACE_USER_STRING,
-                                                    EXTATTR_NAMESPACE_SYSTEM_STRING];
+const EXTATTR_NAMESPACE_NAMES: [&'static str; 3] =
+    ["empty", EXTATTR_NAMESPACE_USER_STRING, EXTATTR_NAMESPACE_SYSTEM_STRING];
 const EXTATTR_NAMESPACE_USER: c_int = 1;
 const EXTATTR_NAMESPACE_SYSTEM: c_int = 2;
 

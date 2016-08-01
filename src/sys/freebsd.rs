@@ -5,8 +5,7 @@ use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::path::Path;
 use std::mem;
 
-use libc::consts::os::posix88::EPERM;
-use libc::{c_char, ssize_t, size_t, c_int, c_void};
+use libc::{c_char, ssize_t, size_t, c_int, c_void, EPERM};
 use util::{path_to_c, allocate_loop};
 
 const EXTATTR_NAMESPACE_USER_STRING: &'static str = "user";

@@ -47,11 +47,14 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-164' class='srclink' href='../src/xattr/src/sys/mod.rs.html#23-26' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-164' class='srclink' href='../src/xattr/src/sys/mod.rs.html#26-29' title='goto source code'>[src]</a></span></h1>
 <pre class='rust const'>pub const SUPPORTED_PLATFORM: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a><code> = </code><code>true</code></pre><div class='docblock'><p>A constant indicating whether or not the target platform is supported.</p>
 
 <p>To make programmer&#39;s lives easier, this library builds on all platforms.
 However, all function calls on unsupported platforms will return io::Errors.</p>
+
+<p>Note: If you would like compilation to simply fail on unsupported platforms,
+turn of the <code>unsupported</code> feature.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

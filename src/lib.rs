@@ -5,6 +5,7 @@ extern crate libc;
 
 mod sys;
 mod util;
+mod error;
 
 use std::os::unix::io::AsRawFd;
 use std::ffi::OsStr;
@@ -12,7 +13,8 @@ use std::io;
 use std::fs::File;
 use std::path::Path;
 
-pub use sys::XAttrs;
+pub use sys::{XAttrs, SUPPORTED_PLATFORM};
+pub use error::UnsupportedPlatformError;
 
 /// Get an extended attribute for the specified file.
 pub fn get<N, P>(path: P, name: N) -> io::Result<Vec<u8>>

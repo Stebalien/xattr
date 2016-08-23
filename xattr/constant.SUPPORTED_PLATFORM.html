@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `get` fn in crate `xattr`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, get">
+    <meta name="description" content="API documentation for the Rust `SUPPORTED_PLATFORM` constant in crate `xattr`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, SUPPORTED_PLATFORM">
 
-    <title>xattr::get - Rust</title>
+    <title>xattr::SUPPORTED_PLATFORM - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -28,7 +28,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>xattr</a></p><script>window.sidebarCurrent = {name: 'get', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>xattr</a></p><script>window.sidebarCurrent = {name: 'SUPPORTED_PLATFORM', ty: 'constant', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,13 +42,16 @@
         </form>
     </nav>
 
-    <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>xattr</a>::<wbr><a class='fn' href=''>get</a></span><span class='out-of-band'><span id='render-detail'>
+    <section id='main' class="content constant">
+<h1 class='fqn'><span class='in-band'><a href='index.html'>xattr</a>::<wbr><a class='constant' href=''>SUPPORTED_PLATFORM</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-215' class='srclink' href='../src/xattr/src/lib.rs.html#20-25' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn get&lt;N,&nbsp;P&gt;(path: P, name: N) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/std/io/error/type.Result.html' title='std::io::error::Result'>Result</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;&gt; <span class='where'>where P: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Path.html' title='std::path::Path'>Path</a>&gt;, N: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html' title='core::convert::AsRef'>AsRef</a>&lt;<a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/os_str/struct.OsStr.html' title='std::ffi::os_str::OsStr'>OsStr</a>&gt;</span></pre><div class='docblock'><p>Get an extended attribute for the specified file.</p>
+               </span><a id='src-164' class='srclink' href='../src/xattr/src/sys/mod.rs.html#23-26' title='goto source code'>[src]</a></span></h1>
+<pre class='rust const'>pub const SUPPORTED_PLATFORM: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a><code> = </code><code>true</code></pre><div class='docblock'><p>A constant indicating whether or not the target platform is supported.</p>
+
+<p>To make programmer&#39;s lives easier, this library builds on all platforms.
+However, all function calls on unsupported platforms will return io::Errors.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

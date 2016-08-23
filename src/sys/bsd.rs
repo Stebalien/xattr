@@ -1,3 +1,5 @@
+//! FreeBSD and NetBSD xattr support.
+
 use std::io;
 use std::ffi::{CString, OsStr, OsString};
 use std::os::unix::io::RawFd;

@@ -19,7 +19,8 @@ pub use self::unsupported::*;
 /// A constant indicating whether or not the target platform is supported.
 ///
 /// To make programmer's lives easier, this library builds on all platforms.
-/// However, all function calls on unsupported platforms will return io::Errors.
+/// However, all function calls on unsupported platforms will return
+/// `io::Error`s.
 ///
 /// Note: If you would like compilation to simply fail on unsupported platforms,
 /// turn of the `unsupported` feature.

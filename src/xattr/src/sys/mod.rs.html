@@ -71,6 +71,7 @@
 <span id="27">27</span>
 <span id="28">28</span>
 <span id="29">29</span>
+<span id="30">30</span>
 </pre><pre class='rust '>
 <span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>any</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;macos&quot;</span>, <span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;linux&quot;</span>))]</span>
 <span class='kw'>mod</span> <span class='ident'>linux_macos</span>;
@@ -93,7 +94,8 @@
 <span class='doccomment'>/// A constant indicating whether or not the target platform is supported.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// To make programmer&#39;s lives easier, this library builds on all platforms.</span>
-<span class='doccomment'>/// However, all function calls on unsupported platforms will return io::Errors.</span>
+<span class='doccomment'>/// However, all function calls on unsupported platforms will return</span>
+<span class='doccomment'>/// `io::Error`s.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>/// Note: If you would like compilation to simply fail on unsupported platforms,</span>
 <span class='doccomment'>/// turn of the `unsupported` feature.</span>

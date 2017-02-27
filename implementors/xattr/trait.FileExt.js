@@ -1,4 +1,5 @@
 (function() {var implementors = {};
+implementors["xattr"] = [];
 implementors['xattr'] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];implementors["xattr"] = [];
 
             if (window.register_implementors) {

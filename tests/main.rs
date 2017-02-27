@@ -43,7 +43,7 @@ fn test_path() {
     assert!(xattr::get(tmp.path(), "user.test").is_err());
     assert_eq!(xattr::list(tmp.path())
                .unwrap()
-               .map(|x| x.as_bytes().starts_with(b"user."))
+               .filter(|x| x.as_bytes().starts_with(b"user."))
                .count(), 0);
 
     xattr::set(tmp.path(), "user.test", b"my test").unwrap();

@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1"> 1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1"> 1</span>
 <span id="2"> 2</span>
 <span id="3"> 3</span>
 <span id="4"> 4</span>
@@ -127,91 +127,91 @@
 <span id="82">82</span>
 <span id="83">83</span>
 <span id="84">84</span>
-</pre><pre class='rust '>
-<span class='doccomment'>//! Manage extended attributes.</span>
-<span class='doccomment'>//!</span>
-<span class='doccomment'>//! Note: This library *does not* follow symlinks.</span>
-<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>libc</span>;
+</pre><pre class="rust ">
+<span class="doccomment">//! Manage extended attributes.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Note: This library *does not* follow symlinks.</span>
+<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
 
-<span class='kw'>mod</span> <span class='ident'>sys</span>;
-<span class='kw'>mod</span> <span class='ident'>util</span>;
-<span class='kw'>mod</span> <span class='ident'>error</span>;
+<span class="kw">mod</span> <span class="ident">sys</span>;
+<span class="kw">mod</span> <span class="ident">util</span>;
+<span class="kw">mod</span> <span class="ident">error</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>AsRawFd</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::<span class='ident'>OsStr</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::<span class='ident'>File</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::<span class="ident">AsRawFd</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">OsStr</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fs</span>::<span class="ident">File</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
 
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>sys</span>::{<span class='ident'>XAttrs</span>, <span class='ident'>SUPPORTED_PLATFORM</span>};
-<span class='kw'>pub</span> <span class='kw'>use</span> <span class='ident'>error</span>::<span class='ident'>UnsupportedPlatformError</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">sys</span>::{<span class="ident">XAttrs</span>, <span class="ident">SUPPORTED_PLATFORM</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error</span>::<span class="ident">UnsupportedPlatformError</span>;
 
-<span class='doccomment'>/// Get an extended attribute for the specified file.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get</span><span class='op'>&lt;</span><span class='ident'>N</span>, <span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span>,
-          <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+<span class="doccomment">/// Get an extended attribute for the specified file.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
+          <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
 {
-    <span class='ident'>sys</span>::<span class='ident'>get_path</span>(<span class='ident'>path</span>.<span class='ident'>as_ref</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>())
+    <span class="ident">util</span>::<span class="ident">extract_noattr</span>(<span class="ident">sys</span>::<span class="ident">get_path</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>()))
 }
 
-<span class='doccomment'>/// Set an extended attribute on the specified file.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set</span><span class='op'>&lt;</span><span class='ident'>N</span>, <span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>name</span>: <span class='ident'>N</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span>,
-          <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+<span class="doccomment">/// Set an extended attribute on the specified file.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>, <span class="ident">name</span>: <span class="ident">N</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
+          <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
 {
-    <span class='ident'>sys</span>::<span class='ident'>set_path</span>(<span class='ident'>path</span>.<span class='ident'>as_ref</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>(), <span class='ident'>value</span>)
+    <span class="ident">sys</span>::<span class="ident">set_path</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="ident">value</span>)
 }
 
-<span class='doccomment'>/// Remove an extended attribute from the specified file.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>remove</span><span class='op'>&lt;</span><span class='ident'>N</span>, <span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>, <span class='ident'>name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span>,
-          <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+<span class="doccomment">/// Remove an extended attribute from the specified file.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove</span><span class="op">&lt;</span><span class="ident">N</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>,
+          <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
 {
-    <span class='ident'>sys</span>::<span class='ident'>remove_path</span>(<span class='ident'>path</span>.<span class='ident'>as_ref</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>())
+    <span class="ident">sys</span>::<span class="ident">remove_path</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>())
 }
 
-<span class='doccomment'>/// List extended attributes attached to the specified file.</span>
-<span class='doccomment'>///</span>
-<span class='doccomment'>/// Note: this may not list *all* attributes. Speficially, it definitely won&#39;t list any trusted</span>
-<span class='doccomment'>/// attributes unless you are root and it may not list system attributes.</span>
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>XAttrs</span><span class='op'>&gt;</span>
-    <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span>
+<span class="doccomment">/// List extended attributes attached to the specified file.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Note: this may not list *all* attributes. Speficially, it definitely won&#39;t list any trusted</span>
+<span class="doccomment">/// attributes unless you are root and it may not list system attributes.</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list</span><span class="op">&lt;</span><span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">XAttrs</span><span class="op">&gt;</span>
+    <span class="kw">where</span> <span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span>
 {
-    <span class='ident'>sys</span>::<span class='ident'>list_path</span>(<span class='ident'>path</span>.<span class='ident'>as_ref</span>())
+    <span class="ident">sys</span>::<span class="ident">list_path</span>(<span class="ident">path</span>.<span class="ident">as_ref</span>())
 }
 
-<span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>FileExt</span>: <span class='ident'>AsRawFd</span> {
-    <span class='doccomment'>/// Get an extended attribute for the specified file.</span>
-    <span class='kw'>fn</span> <span class='ident'>get_xattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FileExt</span>: <span class="ident">AsRawFd</span> {
+    <span class="doccomment">/// Get an extended attribute for the specified file.</span>
+    <span class="kw">fn</span> <span class="ident">get_xattr</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
     {
-        <span class='ident'>sys</span>::<span class='ident'>get_fd</span>(<span class='self'>self</span>.<span class='ident'>as_raw_fd</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>())
+        <span class="ident">util</span>::<span class="ident">extract_noattr</span>(<span class="ident">sys</span>::<span class="ident">get_fd</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>()))
     }
 
-    <span class='doccomment'>/// Set an extended attribute on the specified file.</span>
-    <span class='kw'>fn</span> <span class='ident'>set_xattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='ident'>N</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+    <span class="doccomment">/// Set an extended attribute on the specified file.</span>
+    <span class="kw">fn</span> <span class="ident">set_xattr</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
     {
-        <span class='ident'>sys</span>::<span class='ident'>set_fd</span>(<span class='self'>self</span>.<span class='ident'>as_raw_fd</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>(), <span class='ident'>value</span>)
+        <span class="ident">sys</span>::<span class="ident">set_fd</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="ident">value</span>)
     }
 
-    <span class='doccomment'>/// Remove an extended attribute from the specified file.</span>
-    <span class='kw'>fn</span> <span class='ident'>remove_xattr</span><span class='op'>&lt;</span><span class='ident'>N</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>name</span>: <span class='ident'>N</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span>
-        <span class='kw'>where</span> <span class='ident'>N</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>OsStr</span><span class='op'>&gt;</span>
+    <span class="doccomment">/// Remove an extended attribute from the specified file.</span>
+    <span class="kw">fn</span> <span class="ident">remove_xattr</span><span class="op">&lt;</span><span class="ident">N</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">name</span>: <span class="ident">N</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+        <span class="kw">where</span> <span class="ident">N</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">OsStr</span><span class="op">&gt;</span>
     {
-        <span class='ident'>sys</span>::<span class='ident'>remove_fd</span>(<span class='self'>self</span>.<span class='ident'>as_raw_fd</span>(), <span class='ident'>name</span>.<span class='ident'>as_ref</span>())
+        <span class="ident">sys</span>::<span class="ident">remove_fd</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>(), <span class="ident">name</span>.<span class="ident">as_ref</span>())
     }
 
-    <span class='doccomment'>/// List extended attributes attached to the specified file.</span>
-    <span class='doccomment'>///</span>
-    <span class='doccomment'>/// Note: this may not list *all* attributes. Speficially, it definitely won&#39;t list any trusted</span>
-    <span class='doccomment'>/// attributes unless you are root and it may not list system attributes.</span>
-    <span class='kw'>fn</span> <span class='ident'>list_xattr</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>XAttrs</span><span class='op'>&gt;</span> {
-        <span class='ident'>sys</span>::<span class='ident'>list_fd</span>(<span class='self'>self</span>.<span class='ident'>as_raw_fd</span>())
+    <span class="doccomment">/// List extended attributes attached to the specified file.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note: this may not list *all* attributes. Speficially, it definitely won&#39;t list any trusted</span>
+    <span class="doccomment">/// attributes unless you are root and it may not list system attributes.</span>
+    <span class="kw">fn</span> <span class="ident">list_xattr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">XAttrs</span><span class="op">&gt;</span> {
+        <span class="ident">sys</span>::<span class="ident">list_fd</span>(<span class="self">self</span>.<span class="ident">as_raw_fd</span>())
     }
 }
 
-<span class='kw'>impl</span> <span class='ident'>FileExt</span> <span class='kw'>for</span> <span class='ident'>File</span> {}
+<span class="kw">impl</span> <span class="ident">FileExt</span> <span class="kw">for</span> <span class="ident">File</span> {}
 </pre>
 </section>
     <section id='search' class="content hidden"></section>
@@ -270,7 +270,6 @@
         window.rootPath = "../../";
         window.currentCrate = "xattr";
     </script>
-    <script src="../../jquery.js"></script>
     <script src="../../main.js"></script>
     <script defer src="../../search-index.js"></script>
 </body>

@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1"> 1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1"> 1</span>
 <span id="2"> 2</span>
 <span id="3"> 3</span>
 <span id="4"> 4</span>
@@ -90,53 +90,53 @@
 <span id="45">45</span>
 <span id="46">46</span>
 <span id="47">47</span>
-</pre><pre class='rust '>
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_char</span>, <span class='ident'>ssize_t</span>, <span class='ident'>size_t</span>, <span class='ident'>c_int</span>, <span class='ident'>c_void</span>};
+</pre><pre class="rust ">
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_char</span>, <span class="ident">ssize_t</span>, <span class="ident">size_t</span>, <span class="ident">c_int</span>, <span class="ident">c_void</span>};
 
-<span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> {
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>flistxattr</span>(<span class='ident'>fd</span>: <span class='ident'>c_int</span>, <span class='ident'>buf</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, <span class='ident'>size</span>: <span class='ident'>size_t</span>) <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>fgetxattr</span>(<span class='ident'>fd</span>: <span class='ident'>c_int</span>, <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>size</span>: <span class='ident'>size_t</span>) <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>fremovexattr</span>(<span class='ident'>fd</span>: <span class='ident'>c_int</span>, <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">flistxattr</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">buf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>, <span class="ident">size</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fgetxattr</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>, <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">size</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">fremovexattr</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>, <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>llistxattr</span>(<span class='ident'>path</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>buf</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, <span class='ident'>size</span>: <span class='ident'>size_t</span>) <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>lgetxattr</span>(<span class='ident'>path</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                     <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                     <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>,
-                     <span class='ident'>size</span>: <span class='ident'>size_t</span>)
-                     <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
-    <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>lremovexattr</span>(<span class='ident'>path</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>, <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>) <span class='op'>-&gt;</span> <span class='ident'>c_int</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">llistxattr</span>(<span class="ident">path</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>, <span class="ident">buf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>, <span class="ident">size</span>: <span class="ident">size_t</span>) <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lgetxattr</span>(<span class="ident">path</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                     <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                     <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
+                     <span class="ident">size</span>: <span class="ident">size_t</span>)
+                     <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">lremovexattr</span>(<span class="ident">path</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>, <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 }
 
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>fsetxattr</span>(<span class='ident'>fd</span>: <span class='ident'>c_int</span>,
-                        <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                        <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                        <span class='ident'>size</span>: <span class='ident'>size_t</span>)
-                        <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span> {
-    <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> {
-        <span class='kw'>fn</span> <span class='ident'>fsetxattr</span>(<span class='ident'>fd</span>: <span class='ident'>c_int</span>,
-                     <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                     <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                     <span class='ident'>size</span>: <span class='ident'>size_t</span>,
-                     <span class='ident'>flags</span>: <span class='ident'>c_int</span>)
-                     <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">fsetxattr</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>,
+                        <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                        <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                        <span class="ident">size</span>: <span class="ident">size_t</span>)
+                        <span class="op">-&gt;</span> <span class="ident">ssize_t</span> {
+    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+        <span class="kw">fn</span> <span class="ident">fsetxattr</span>(<span class="ident">fd</span>: <span class="ident">c_int</span>,
+                     <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                     <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                     <span class="ident">size</span>: <span class="ident">size_t</span>,
+                     <span class="ident">flags</span>: <span class="ident">c_int</span>)
+                     <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
     }
-    <span class='ident'>fsetxattr</span>(<span class='ident'>fd</span>, <span class='ident'>name</span>, <span class='ident'>value</span>, <span class='ident'>size</span>, <span class='number'>0</span>)
+    <span class="ident">fsetxattr</span>(<span class="ident">fd</span>, <span class="ident">name</span>, <span class="ident">value</span>, <span class="ident">size</span>, <span class="number">0</span>)
 }
 
-<span class='kw'>pub</span> <span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>lsetxattr</span>(<span class='ident'>path</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                        <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                        <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                        <span class='ident'>size</span>: <span class='ident'>size_t</span>)
-                        <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span> {
-    <span class='kw'>extern</span> <span class='string'>&quot;C&quot;</span> {
-        <span class='kw'>fn</span> <span class='ident'>lsetxattr</span>(<span class='ident'>path</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                     <span class='ident'>name</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_char</span>,
-                     <span class='ident'>value</span>: <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                     <span class='ident'>size</span>: <span class='ident'>size_t</span>,
-                     <span class='ident'>flags</span>: <span class='ident'>c_int</span>)
-                     <span class='op'>-&gt;</span> <span class='ident'>ssize_t</span>;
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">lsetxattr</span>(<span class="ident">path</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                        <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                        <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                        <span class="ident">size</span>: <span class="ident">size_t</span>)
+                        <span class="op">-&gt;</span> <span class="ident">ssize_t</span> {
+    <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+        <span class="kw">fn</span> <span class="ident">lsetxattr</span>(<span class="ident">path</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                     <span class="ident">name</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_char</span>,
+                     <span class="ident">value</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                     <span class="ident">size</span>: <span class="ident">size_t</span>,
+                     <span class="ident">flags</span>: <span class="ident">c_int</span>)
+                     <span class="op">-&gt;</span> <span class="ident">ssize_t</span>;
     }
-    <span class='ident'>lsetxattr</span>(<span class='ident'>path</span>, <span class='ident'>name</span>, <span class='ident'>value</span>, <span class='ident'>size</span>, <span class='number'>0</span>)
+    <span class="ident">lsetxattr</span>(<span class="ident">path</span>, <span class="ident">name</span>, <span class="ident">value</span>, <span class="ident">size</span>, <span class="number">0</span>)
 }
 </pre>
 </section>
@@ -196,7 +196,6 @@
         window.rootPath = "../../../../";
         window.currentCrate = "xattr";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

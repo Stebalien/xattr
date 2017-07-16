@@ -17,7 +17,7 @@
     
     
 </head>
-<body class="rustdoc">
+<body class="rustdoc source">
     <!--[if lte IE 8]>
     <div class="warning">
         This old browser is unsupported and will most likely display funky
@@ -43,7 +43,7 @@
         </form>
     </nav>
 
-    <section id='main' class="content source"><pre class="line-numbers"><span id="1">  1</span>
+    <section id='main' class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -206,168 +206,168 @@
 <span id="161">161</span>
 <span id="162">162</span>
 <span id="163">163</span>
-</pre><pre class='rust '>
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;linux&quot;</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>linux</span>;
+</pre><pre class="rust ">
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">linux</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;linux&quot;</span>)]</span>
-<span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>linux</span>::<span class='kw-2'>*</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>)]</span>
+<span class="kw">use</span> <span class="self">self</span>::<span class="ident">linux</span>::<span class="kw-2">*</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;macos&quot;</span>)]</span>
-<span class='kw'>mod</span> <span class='ident'>macos</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>)]</span>
+<span class="kw">mod</span> <span class="ident">macos</span>;
 
-<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>target_os</span> <span class='op'>=</span> <span class='string'>&quot;macos&quot;</span>)]</span>
-<span class='kw'>use</span> <span class='self'>self</span>::<span class='ident'>macos</span>::<span class='kw-2'>*</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;macos&quot;</span>)]</span>
+<span class="kw">use</span> <span class="self">self</span>::<span class="ident">macos</span>::<span class="kw-2">*</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>io</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ffi</span>::{<span class='ident'>OsStr</span>, <span class='ident'>OsString</span>};
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>io</span>::<span class='ident'>RawFd</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>os</span>::<span class='ident'>unix</span>::<span class='ident'>ffi</span>::<span class='ident'>OsStrExt</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::<span class='ident'>Path</span>;
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>mem</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::{<span class="ident">OsStr</span>, <span class="ident">OsString</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">io</span>::<span class="ident">RawFd</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">unix</span>::<span class="ident">ffi</span>::<span class="ident">OsStrExt</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">path</span>::<span class="ident">Path</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 
-<span class='kw'>use</span> <span class='ident'>libc</span>::{<span class='ident'>c_void</span>, <span class='ident'>size_t</span>, <span class='ident'>c_char</span>};
+<span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">c_void</span>, <span class="ident">size_t</span>, <span class="ident">c_char</span>};
 
-<span class='kw'>use</span> <span class='ident'>util</span>::{<span class='ident'>path_to_c</span>, <span class='ident'>name_to_c</span>, <span class='ident'>allocate_loop</span>};
+<span class="kw">use</span> <span class="ident">util</span>::{<span class="ident">path_to_c</span>, <span class="ident">name_to_c</span>, <span class="ident">allocate_loop</span>};
 
-<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>XAttrs</span> {
-    <span class='ident'>data</span>: <span class='ident'>Box</span><span class='op'>&lt;</span>[<span class='ident'>u8</span>]<span class='op'>&gt;</span>,
-    <span class='ident'>offset</span>: <span class='ident'>usize</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">XAttrs</span> {
+    <span class="ident">data</span>: <span class="ident">Box</span><span class="op">&lt;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span>,
+    <span class="ident">offset</span>: <span class="ident">usize</span>,
 }
 
-<span class='kw'>impl</span> <span class='ident'>Clone</span> <span class='kw'>for</span> <span class='ident'>XAttrs</span> {
-    <span class='kw'>fn</span> <span class='ident'>clone</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
-        <span class='ident'>XAttrs</span> {
-            <span class='ident'>data</span>: <span class='ident'>Vec</span>::<span class='ident'>from</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>*</span><span class='self'>self</span>.<span class='ident'>data</span>).<span class='ident'>into_boxed_slice</span>(),
-            <span class='ident'>offset</span>: <span class='self'>self</span>.<span class='ident'>offset</span>,
+<span class="kw">impl</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">XAttrs</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+        <span class="ident">XAttrs</span> {
+            <span class="ident">data</span>: <span class="ident">Vec</span>::<span class="ident">from</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">data</span>).<span class="ident">into_boxed_slice</span>(),
+            <span class="ident">offset</span>: <span class="self">self</span>.<span class="ident">offset</span>,
         }
     }
-    <span class='kw'>fn</span> <span class='ident'>clone_from</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>other</span>: <span class='kw-2'>&amp;</span><span class='ident'>XAttrs</span>) {
-        <span class='self'>self</span>.<span class='ident'>offset</span> <span class='op'>=</span> <span class='ident'>other</span>.<span class='ident'>offset</span>;
+    <span class="kw">fn</span> <span class="ident">clone_from</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">XAttrs</span>) {
+        <span class="self">self</span>.<span class="ident">offset</span> <span class="op">=</span> <span class="ident">other</span>.<span class="ident">offset</span>;
 
-        <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>data</span> <span class='op'>=</span> <span class='ident'>mem</span>::<span class='ident'>replace</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>data</span>, <span class='ident'>Box</span>::<span class='ident'>new</span>([])).<span class='ident'>into_vec</span>();
-        <span class='ident'>data</span>.<span class='ident'>extend</span>(<span class='ident'>other</span>.<span class='ident'>data</span>.<span class='ident'>iter</span>().<span class='ident'>cloned</span>());
-        <span class='self'>self</span>.<span class='ident'>data</span> <span class='op'>=</span> <span class='ident'>data</span>.<span class='ident'>into_boxed_slice</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data</span> <span class="op">=</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">data</span>, <span class="ident">Box</span>::<span class="ident">new</span>([])).<span class="ident">into_vec</span>();
+        <span class="ident">data</span>.<span class="ident">extend</span>(<span class="ident">other</span>.<span class="ident">data</span>.<span class="ident">iter</span>().<span class="ident">cloned</span>());
+        <span class="self">self</span>.<span class="ident">data</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">into_boxed_slice</span>();
     }
 }
 
-<span class='comment'>// Yes, I could avoid these allocations on linux/macos. However, if we ever want to be freebsd</span>
-<span class='comment'>// compatable, we need to be able to prepend the namespace to the extended attribute names.</span>
-<span class='comment'>// Furthermore, borrowing makes the API messy.</span>
-<span class='kw'>impl</span> <span class='ident'>Iterator</span> <span class='kw'>for</span> <span class='ident'>XAttrs</span> {
-    <span class='kw'>type</span> <span class='ident'>Item</span> <span class='op'>=</span> <span class='ident'>OsString</span>;
-    <span class='kw'>fn</span> <span class='ident'>next</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>OsString</span><span class='op'>&gt;</span> {
-        <span class='kw'>let</span> <span class='ident'>data</span> <span class='op'>=</span> <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>data</span>[<span class='self'>self</span>.<span class='ident'>offset</span>..];
-        <span class='kw'>if</span> <span class='ident'>data</span>.<span class='ident'>is_empty</span>() {
-            <span class='prelude-val'>None</span>
-        } <span class='kw'>else</span> {
-            <span class='comment'>// always null terminated (unless empty).</span>
-            <span class='kw'>let</span> <span class='ident'>end</span> <span class='op'>=</span> <span class='ident'>data</span>.<span class='ident'>iter</span>().<span class='ident'>position</span>(<span class='op'>|</span><span class='kw-2'>&amp;</span><span class='ident'>b</span><span class='op'>|</span> <span class='ident'>b</span> <span class='op'>==</span> <span class='number'>0u8</span>).<span class='ident'>unwrap</span>();
-            <span class='self'>self</span>.<span class='ident'>offset</span> <span class='op'>+=</span> <span class='ident'>end</span> <span class='op'>+</span> <span class='number'>1</span>;
-            <span class='prelude-val'>Some</span>(<span class='ident'>OsStr</span>::<span class='ident'>from_bytes</span>(<span class='kw-2'>&amp;</span><span class='ident'>data</span>[..<span class='ident'>end</span>]).<span class='ident'>to_owned</span>())
+<span class="comment">// Yes, I could avoid these allocations on linux/macos. However, if we ever want to be freebsd</span>
+<span class="comment">// compatable, we need to be able to prepend the namespace to the extended attribute names.</span>
+<span class="comment">// Furthermore, borrowing makes the API messy.</span>
+<span class="kw">impl</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">XAttrs</span> {
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">OsString</span>;
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">OsString</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">data</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">data</span>[<span class="self">self</span>.<span class="ident">offset</span>..];
+        <span class="kw">if</span> <span class="ident">data</span>.<span class="ident">is_empty</span>() {
+            <span class="prelude-val">None</span>
+        } <span class="kw">else</span> {
+            <span class="comment">// always null terminated (unless empty).</span>
+            <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">data</span>.<span class="ident">iter</span>().<span class="ident">position</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0u8</span>).<span class="ident">unwrap</span>();
+            <span class="self">self</span>.<span class="ident">offset</span> <span class="op">+=</span> <span class="ident">end</span> <span class="op">+</span> <span class="number">1</span>;
+            <span class="prelude-val">Some</span>(<span class="ident">OsStr</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="ident">data</span>[..<span class="ident">end</span>]).<span class="ident">to_owned</span>())
         }
     }
 
-    <span class='kw'>fn</span> <span class='ident'>size_hint</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>usize</span>, <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>usize</span><span class='op'>&gt;</span>) {
-        <span class='kw'>if</span> <span class='self'>self</span>.<span class='ident'>data</span>.<span class='ident'>len</span>() <span class='op'>==</span> <span class='self'>self</span>.<span class='ident'>offset</span> {
-            (<span class='number'>0</span>, <span class='prelude-val'>Some</span>(<span class='number'>0</span>))
-        } <span class='kw'>else</span> {
-            (<span class='number'>1</span>, <span class='prelude-val'>None</span>)
+    <span class="kw">fn</span> <span class="ident">size_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">usize</span>, <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">data</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="self">self</span>.<span class="ident">offset</span> {
+            (<span class="number">0</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>))
+        } <span class="kw">else</span> {
+            (<span class="number">1</span>, <span class="prelude-val">None</span>)
         }
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_fd</span>(<span class='ident'>fd</span>: <span class='ident'>RawFd</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>unsafe</span> {
-        <span class='ident'>allocate_loop</span>(<span class='op'>|</span><span class='ident'>buf</span>, <span class='ident'>len</span><span class='op'>|</span> <span class='ident'>fgetxattr</span>(<span class='ident'>fd</span>, <span class='ident'>name</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>buf</span> <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>, <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>size_t</span>))
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_fd</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">unsafe</span> {
+        <span class="ident">allocate_loop</span>(<span class="op">|</span><span class="ident">buf</span>, <span class="ident">len</span><span class="op">|</span> <span class="ident">fgetxattr</span>(<span class="ident">fd</span>, <span class="ident">name</span>.<span class="ident">as_ptr</span>(), <span class="ident">buf</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>, <span class="ident">len</span> <span class="kw">as</span> <span class="ident">size_t</span>))
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_fd</span>(<span class='ident'>fd</span>: <span class='ident'>RawFd</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-        <span class='ident'>fsetxattr</span>(<span class='ident'>fd</span>,
-                  <span class='ident'>name</span>.<span class='ident'>as_ptr</span>(),
-                  <span class='ident'>value</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                  <span class='ident'>value</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>size_t</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_fd</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+        <span class="ident">fsetxattr</span>(<span class="ident">fd</span>,
+                  <span class="ident">name</span>.<span class="ident">as_ptr</span>(),
+                  <span class="ident">value</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                  <span class="ident">value</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">size_t</span>)
     };
-    <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>!=</span> <span class='number'>0</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>())
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(())
+    <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!=</span> <span class="number">0</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>remove_fd</span>(<span class='ident'>fd</span>: <span class='ident'>RawFd</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>fremovexattr</span>(<span class='ident'>fd</span>, <span class='ident'>name</span>.<span class='ident'>as_ptr</span>()) };
-    <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>!=</span> <span class='number'>0</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>())
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(())
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_fd</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">fremovexattr</span>(<span class="ident">fd</span>, <span class="ident">name</span>.<span class="ident">as_ptr</span>()) };
+    <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!=</span> <span class="number">0</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_fd</span>(<span class='ident'>fd</span>: <span class='ident'>RawFd</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>XAttrs</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-        <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>allocate_loop</span>(<span class='op'>|</span><span class='ident'>buf</span>, <span class='ident'>len</span><span class='op'>|</span> <span class='ident'>flistxattr</span>(<span class='ident'>fd</span>, <span class='ident'>buf</span> <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>size_t</span>)))
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_fd</span>(<span class="ident">fd</span>: <span class="ident">RawFd</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">XAttrs</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">vec</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+        <span class="macro">try</span><span class="macro">!</span>(<span class="ident">allocate_loop</span>(<span class="op">|</span><span class="ident">buf</span>, <span class="ident">len</span><span class="op">|</span> <span class="ident">flistxattr</span>(<span class="ident">fd</span>, <span class="ident">buf</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>, <span class="ident">len</span> <span class="kw">as</span> <span class="ident">size_t</span>)))
     };
-    <span class='prelude-val'>Ok</span>(<span class='ident'>XAttrs</span> {
-        <span class='ident'>data</span>: <span class='ident'>vec</span>.<span class='ident'>into_boxed_slice</span>(),
-        <span class='ident'>offset</span>: <span class='number'>0</span>,
+    <span class="prelude-val">Ok</span>(<span class="ident">XAttrs</span> {
+        <span class="ident">data</span>: <span class="ident">vec</span>.<span class="ident">into_boxed_slice</span>(),
+        <span class="ident">offset</span>: <span class="number">0</span>,
     })
 }
 
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>get_path</span>(<span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>Path</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>u8</span><span class='op'>&gt;&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>path_to_c</span>(<span class='ident'>path</span>));
-    <span class='kw'>unsafe</span> {
-        <span class='ident'>allocate_loop</span>(<span class='op'>|</span><span class='ident'>buf</span>, <span class='ident'>len</span><span class='op'>|</span> {
-            <span class='ident'>lgetxattr</span>(<span class='ident'>path</span>.<span class='ident'>as_ptr</span>(),
-                      <span class='ident'>name</span>.<span class='ident'>as_ptr</span>(),
-                      <span class='ident'>buf</span> <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_void</span>,
-                      <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>size_t</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">path_to_c</span>(<span class="ident">path</span>));
+    <span class="kw">unsafe</span> {
+        <span class="ident">allocate_loop</span>(<span class="op">|</span><span class="ident">buf</span>, <span class="ident">len</span><span class="op">|</span> {
+            <span class="ident">lgetxattr</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>(),
+                      <span class="ident">name</span>.<span class="ident">as_ptr</span>(),
+                      <span class="ident">buf</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
+                      <span class="ident">len</span> <span class="kw">as</span> <span class="ident">size_t</span>)
         })
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>set_path</span>(<span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>Path</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>, <span class='ident'>value</span>: <span class='kw-2'>&amp;</span>[<span class='ident'>u8</span>]) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>path_to_c</span>(<span class='ident'>path</span>));
-    <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-        <span class='ident'>lsetxattr</span>(<span class='ident'>path</span>.<span class='ident'>as_ptr</span>(),
-                  <span class='ident'>name</span>.<span class='ident'>as_ptr</span>(),
-                  <span class='ident'>value</span>.<span class='ident'>as_ptr</span>() <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw'>const</span> <span class='ident'>c_void</span>,
-                  <span class='ident'>value</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>size_t</span>)
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">path_to_c</span>(<span class="ident">path</span>));
+    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+        <span class="ident">lsetxattr</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>(),
+                  <span class="ident">name</span>.<span class="ident">as_ptr</span>(),
+                  <span class="ident">value</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_void</span>,
+                  <span class="ident">value</span>.<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">size_t</span>)
     };
-    <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>!=</span> <span class='number'>0</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>())
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(())
+    <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!=</span> <span class="number">0</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>remove_path</span>(<span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>Path</span>, <span class='ident'>name</span>: <span class='kw-2'>&amp;</span><span class='ident'>OsStr</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span>()<span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>name_to_c</span>(<span class='ident'>name</span>));
-    <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>path_to_c</span>(<span class='ident'>path</span>));
-    <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>lremovexattr</span>(<span class='ident'>path</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>name</span>.<span class='ident'>as_ptr</span>()) };
-    <span class='kw'>if</span> <span class='ident'>ret</span> <span class='op'>!=</span> <span class='number'>0</span> {
-        <span class='prelude-val'>Err</span>(<span class='ident'>io</span>::<span class='ident'>Error</span>::<span class='ident'>last_os_error</span>())
-    } <span class='kw'>else</span> {
-        <span class='prelude-val'>Ok</span>(())
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">remove_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">OsStr</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">name_to_c</span>(<span class="ident">name</span>));
+    <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">path_to_c</span>(<span class="ident">path</span>));
+    <span class="kw">let</span> <span class="ident">ret</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">lremovexattr</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>(), <span class="ident">name</span>.<span class="ident">as_ptr</span>()) };
+    <span class="kw">if</span> <span class="ident">ret</span> <span class="op">!=</span> <span class="number">0</span> {
+        <span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">last_os_error</span>())
+    } <span class="kw">else</span> {
+        <span class="prelude-val">Ok</span>(())
     }
 }
 
-<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>list_path</span>(<span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>Path</span>) <span class='op'>-&gt;</span> <span class='ident'>io</span>::<span class='prelude-ty'>Result</span><span class='op'>&lt;</span><span class='ident'>XAttrs</span><span class='op'>&gt;</span> {
-    <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>path_to_c</span>(<span class='ident'>path</span>));
-    <span class='kw'>let</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-        <span class='macro'>try</span><span class='macro'>!</span>(<span class='ident'>allocate_loop</span>(<span class='op'>|</span><span class='ident'>buf</span>, <span class='ident'>len</span><span class='op'>|</span> <span class='ident'>llistxattr</span>(<span class='ident'>path</span>.<span class='ident'>as_ptr</span>(), <span class='ident'>buf</span> <span class='kw'>as</span> <span class='kw-2'>*</span><span class='kw-2'>mut</span> <span class='ident'>c_char</span>, <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>size_t</span>)))
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">list_path</span>(<span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">Path</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">XAttrs</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="ident">path_to_c</span>(<span class="ident">path</span>));
+    <span class="kw">let</span> <span class="ident">vec</span> <span class="op">=</span> <span class="kw">unsafe</span> {
+        <span class="macro">try</span><span class="macro">!</span>(<span class="ident">allocate_loop</span>(<span class="op">|</span><span class="ident">buf</span>, <span class="ident">len</span><span class="op">|</span> <span class="ident">llistxattr</span>(<span class="ident">path</span>.<span class="ident">as_ptr</span>(), <span class="ident">buf</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_char</span>, <span class="ident">len</span> <span class="kw">as</span> <span class="ident">size_t</span>)))
     };
-    <span class='prelude-val'>Ok</span>(<span class='ident'>XAttrs</span> {
-        <span class='ident'>data</span>: <span class='ident'>vec</span>.<span class='ident'>into_boxed_slice</span>(),
-        <span class='ident'>offset</span>: <span class='number'>0</span>,
+    <span class="prelude-val">Ok</span>(<span class="ident">XAttrs</span> {
+        <span class="ident">data</span>: <span class="ident">vec</span>.<span class="ident">into_boxed_slice</span>(),
+        <span class="ident">offset</span>: <span class="number">0</span>,
     })
 }
 </pre>
@@ -428,7 +428,6 @@
         window.rootPath = "../../../../";
         window.currentCrate = "xattr";
     </script>
-    <script src="../../../../jquery.js"></script>
     <script src="../../../../main.js"></script>
     <script defer src="../../../../search-index.js"></script>
 </body>

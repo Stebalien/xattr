@@ -5,7 +5,8 @@ use std::ptr;
 use std::ffi::CString;
 use std::path::Path;
 
-use libc::{ERANGE, ENODATA, ssize_t};
+use libc::{ERANGE, ENOATTR, ssize_t};
+
 
 #[allow(dead_code)]
 pub fn name_to_c(name: &OsStr) -> io::Result<CString> {
@@ -28,7 +29,7 @@ pub fn path_to_c(path: &Path) -> io::Result<CString> {
 
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
     result.map(|v| Some(v)).or_else(|e| match e.raw_os_error() {
-        Some(ENODATA) => Ok(None),
+        Some(ENOATTR) => Ok(None),
         _ => Err(e),
     })
 }

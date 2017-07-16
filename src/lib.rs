@@ -17,11 +17,11 @@ pub use sys::{XAttrs, SUPPORTED_PLATFORM};
 pub use error::UnsupportedPlatformError;
 
 /// Get an extended attribute for the specified file.
-pub fn get<N, P>(path: P, name: N) -> io::Result<Vec<u8>>
+pub fn get<N, P>(path: P, name: N) -> io::Result<Option<Vec<u8>>>
     where P: AsRef<Path>,
           N: AsRef<OsStr>
 {
-    sys::get_path(path.as_ref(), name.as_ref())
+    util::extract_noattr(sys::get_path(path.as_ref(), name.as_ref()))
 }
 
 /// Set an extended attribute on the specified file.
@@ -52,10 +52,10 @@ pub fn list<P>(path: P) -> io::Result<XAttrs>
 
 pub trait FileExt: AsRawFd {
     /// Get an extended attribute for the specified file.
-    fn get_xattr<N>(&self, name: N) -> io::Result<Vec<u8>>
+    fn get_xattr<N>(&self, name: N) -> io::Result<Option<Vec<u8>>>
         where N: AsRef<OsStr>
     {
-        sys::get_fd(self.as_raw_fd(), name.as_ref())
+        util::extract_noattr(sys::get_fd(self.as_raw_fd(), name.as_ref()))
     }
 
     /// Set an extended attribute on the specified file.

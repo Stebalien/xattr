@@ -8,7 +8,7 @@ use xattr::FileExt;
 use tempfile::{tempfile_in, NamedTempFile};
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os="macos"))]
 fn test_fd() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
@@ -35,7 +35,7 @@ fn test_fd() {
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os="macos"))]
 fn test_path() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
@@ -63,13 +63,13 @@ fn test_path() {
 
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os="macos"))]
 fn test_missing() {
     assert!(xattr::get("/var/empty/does-not-exist", "user.test").is_err());
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd"))]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os="macos"))]
 fn test_multi() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.

@@ -1,9 +1,9 @@
 use std::ffi::{OsStr, OsString};
+use std::io;
 use std::os::unix::io::RawFd;
 use std::path::Path;
-use std::io;
 
-use ::UnsupportedPlatformError;
+use UnsupportedPlatformError;
 
 #[derive(Clone, Debug)]
 pub struct XAttrs;
@@ -20,33 +20,57 @@ impl Iterator for XAttrs {
 }
 
 pub fn get_fd(_: RawFd, _: &OsStr) -> io::Result<Vec<u8>> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn set_fd(_: RawFd, _: &OsStr, _: &[u8]) -> io::Result<()> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn remove_fd(_: RawFd, _: &OsStr) -> io::Result<()> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn list_fd(_: RawFd) -> io::Result<XAttrs> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn get_path(_: &Path, _: &OsStr) -> io::Result<Vec<u8>> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn set_path(_: &Path, _: &OsStr, _: &[u8]) -> io::Result<()> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn remove_path(_: &Path, _: &OsStr) -> io::Result<()> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }
 
 pub fn list_path(_: &Path) -> io::Result<XAttrs> {
-    Err(io::Error::new(io::ErrorKind::Other, UnsupportedPlatformError))
+    Err(io::Error::new(
+        io::ErrorKind::Other,
+        UnsupportedPlatformError,
+    ))
 }

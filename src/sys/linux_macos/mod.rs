@@ -10,16 +10,16 @@ mod macos;
 #[cfg(target_os = "macos")]
 use self::macos::*;
 
-use std::io;
 use std::ffi::{OsStr, OsString};
-use std::os::unix::io::RawFd;
-use std::os::unix::ffi::OsStrExt;
-use std::path::Path;
+use std::io;
 use std::mem;
+use std::os::unix::ffi::OsStrExt;
+use std::os::unix::io::RawFd;
+use std::path::Path;
 
-use libc::{c_void, size_t, c_char};
+use libc::{c_char, c_void, size_t};
 
-use util::{path_to_c, name_to_c, allocate_loop};
+use util::{allocate_loop, name_to_c, path_to_c};
 
 pub struct XAttrs {
     data: Box<[u8]>,
@@ -78,10 +78,12 @@ pub fn get_fd(fd: RawFd, name: &OsStr) -> io::Result<Vec<u8>> {
 pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
     let name = name_to_c(name)?;
     let ret = unsafe {
-        fsetxattr(fd,
-                  name.as_ptr(),
-                  value.as_ptr() as *const c_void,
-                  value.len() as size_t)
+        fsetxattr(
+            fd,
+            name.as_ptr(),
+            value.as_ptr() as *const c_void,
+            value.len() as size_t,
+        )
     };
     if ret != 0 {
         Err(io::Error::last_os_error())
@@ -101,25 +103,25 @@ pub fn remove_fd(fd: RawFd, name: &OsStr) -> io::Result<()> {
 }
 
 pub fn list_fd(fd: RawFd) -> io::Result<XAttrs> {
-    let vec = unsafe {
-        allocate_loop(|buf, len| flistxattr(fd, buf as *mut c_char, len as size_t))?
-    };
+    let vec =
+        unsafe { allocate_loop(|buf, len| flistxattr(fd, buf as *mut c_char, len as size_t))? };
     Ok(XAttrs {
         data: vec.into_boxed_slice(),
         offset: 0,
     })
 }
 
-
 pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
     let name = name_to_c(name)?;
     let path = path_to_c(path)?;
     unsafe {
         allocate_loop(|buf, len| {
-            lgetxattr(path.as_ptr(),
-                      name.as_ptr(),
-                      buf as *mut c_void,
-                      len as size_t)
+            lgetxattr(
+                path.as_ptr(),
+                name.as_ptr(),
+                buf as *mut c_void,
+                len as size_t,
+            )
         })
     }
 }
@@ -128,10 +130,12 @@ pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
     let name = name_to_c(name)?;
     let path = path_to_c(path)?;
     let ret = unsafe {
-        lsetxattr(path.as_ptr(),
-                  name.as_ptr(),
-                  value.as_ptr() as *const c_void,
-                  value.len() as size_t)
+        lsetxattr(
+            path.as_ptr(),
+            name.as_ptr(),
+            value.as_ptr() as *const c_void,
+            value.len() as size_t,
+        )
     };
     if ret != 0 {
         Err(io::Error::last_os_error())

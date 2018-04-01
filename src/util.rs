@@ -1,21 +1,20 @@
-use std::ffi::OsStr;
-use std::os::unix::ffi::OsStrExt;
-use std::io;
-use std::ptr;
 use std::ffi::CString;
+use std::ffi::OsStr;
+use std::io;
+use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
+use std::ptr;
 
-use libc::{ERANGE, ENOATTR, ssize_t};
-
+use libc::{ssize_t, ENOATTR, ERANGE};
 
 #[allow(dead_code)]
 pub fn name_to_c(name: &OsStr) -> io::Result<CString> {
     match CString::new(name.as_bytes()) {
         Ok(name) => Ok(name),
-        Err(_) => {
-            Err(io::Error::new(io::ErrorKind::InvalidInput,
-                               "name must not contain null bytes"))
-        }
+        Err(_) => Err(io::Error::new(
+            io::ErrorKind::InvalidInput,
+            "name must not contain null bytes",
+        )),
     }
 }
 
@@ -25,7 +24,6 @@ pub fn path_to_c(path: &Path) -> io::Result<CString> {
         Err(_) => Err(io::Error::new(io::ErrorKind::NotFound, "file not found")),
     }
 }
-
 
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
     result.map(|v| Some(v)).or_else(|e| match e.raw_os_error() {
@@ -59,5 +57,4 @@ pub unsafe fn allocate_loop<F: FnMut(*mut u8, usize) -> ssize_t>(mut f: F) -> io
     }
     vec.shrink_to_fit();
     Ok(vec)
-
 }

@@ -142,7 +142,7 @@ fn name_to_ns(name: &OsStr) -> io::Result<(c_int, CString)> {
         None => return Err(io::Error::new(io::ErrorKind::InvalidInput, "no matching namespace")),
     };
 
-    Ok((ns_int as c_int, try!(CString::new(propname))))
+    Ok((ns_int as c_int, CString::new(propname)?))
 }
 
 fn prefix_namespace(attr: &OsStr, ns: c_int) -> OsString {
@@ -155,7 +155,7 @@ fn prefix_namespace(attr: &OsStr, ns: c_int) -> OsString {
 }
 
 pub fn get_fd(fd: RawFd, name: &OsStr) -> io::Result<Vec<u8>> {
-    let (ns, name) = try!(name_to_ns(name));
+    let (ns, name) = name_to_ns(name)?;
     unsafe {
         allocate_loop(|buf, len| {
             extattr_get_fd(fd, ns, name.as_ptr(), buf as *mut c_void, len as size_t)
@@ -164,7 +164,7 @@ pub fn get_fd(fd: RawFd, name: &OsStr) -> io::Result<Vec<u8>> {
 }
 
 pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
-    let (ns, name) = try!(name_to_ns(name));
+    let (ns, name) = name_to_ns(name)?;
     let ret = unsafe {
         extattr_set_fd(fd,
                        ns,
@@ -180,7 +180,7 @@ pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
 }
 
 pub fn remove_fd(fd: RawFd, name: &OsStr) -> io::Result<()> {
-    let (ns, name) = try!(name_to_ns(name));
+    let (ns, name) = name_to_ns(name)?;
     let ret = unsafe { extattr_delete_fd(fd, ns, name.as_ptr()) };
     if ret != 0 {
         Err(io::Error::last_os_error())
@@ -233,8 +233,8 @@ pub fn list_fd(fd: RawFd) -> io::Result<XAttrs> {
 }
 
 pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
-    let (ns, name) = try!(name_to_ns(name));
-    let path = try!(path_to_c(path));
+    let (ns, name) = name_to_ns(name)?;
+    let path = path_to_c(path)?;
     unsafe {
         allocate_loop(|buf, len| {
             extattr_get_link(path.as_ptr(),
@@ -247,8 +247,8 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
 }
 
 pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
-    let (ns, name) = try!(name_to_ns(name));
-    let path = try!(path_to_c(path));
+    let (ns, name) = name_to_ns(name)?;
+    let path = path_to_c(path)?;
     let ret = unsafe {
         extattr_set_link(path.as_ptr(),
                          ns,
@@ -264,8 +264,8 @@ pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
 }
 
 pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
-    let (ns, name) = try!(name_to_ns(name));
-    let path = try!(path_to_c(path));
+    let (ns, name) = name_to_ns(name)?;
+    let path = path_to_c(path)?;
     let ret = unsafe { extattr_delete_link(path.as_ptr(), ns, name.as_ptr()) };
     if ret != 0 {
         Err(io::Error::last_os_error())
@@ -275,7 +275,7 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
 }
 
 pub fn list_path(path: &Path) -> io::Result<XAttrs> {
-    let path = try!(path_to_c(path));
+    let path = path_to_c(path)?;
     let sysvec = unsafe {
         let res = allocate_loop(|buf, len| {
             extattr_list_link(path.as_ptr(),

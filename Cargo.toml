@@ -23,4 +23,4 @@ unsupported = []
 libc = "0.2"
 
 [dev-dependencies]
-tempfile = "2"
+tempfile = "3"

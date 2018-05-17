@@ -21,6 +21,7 @@ use libc::{c_char, c_void, size_t};
 
 use util::{allocate_loop, name_to_c, path_to_c};
 
+/// An iterator over a set of extended attributes names.
 pub struct XAttrs {
     data: Box<[u8]>,
     offset: usize,
@@ -43,7 +44,7 @@ impl Clone for XAttrs {
 }
 
 // Yes, I could avoid these allocations on linux/macos. However, if we ever want to be freebsd
-// compatable, we need to be able to prepend the namespace to the extended attribute names.
+// compatible, we need to be able to prepend the namespace to the extended attribute names.
 // Furthermore, borrowing makes the API messy.
 impl Iterator for XAttrs {
     type Item = OsString;

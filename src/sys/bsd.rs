@@ -70,6 +70,7 @@ extern "C" {
     ) -> ssize_t;
 }
 
+/// An iterator over a set of extended attributes names.
 pub struct XAttrs {
     user_attrs: Box<[u8]>,
     system_attrs: Box<[u8]>,

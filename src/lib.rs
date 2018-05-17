@@ -1,6 +1,30 @@
-//! Manage extended attributes.
+//! A pure-Rust library to manage extended attributes.
 //!
-//! Note: This library *does not* follow symlinks.
+//! It provides support for manipulating extended attributes
+//! (`xattrs`) on modern Unix filesystems. See the `attr(5)`
+//! manpage for more details.
+//!
+//! An extension trait [`FileExt`](::FileExt) is provided to directly work with
+//! standard `File` objects and file descriptors.
+//!
+//! NOTE: In case of a symlink as path argument, all methods
+//! in this library work on the symlink itself **without**
+//! de-referencing it.
+//!
+//! ```rust
+//! let mut xattrs = xattr::list("/").unwrap().peekable();
+//!
+//! if xattrs.peek().is_none() {
+//!     println!("no xattr set on root");
+//!     return;
+//! }
+//!
+//! println!("Extended attributes:");
+//! for attr in xattrs {
+//!     println!(" - {:?}", attr);
+//! }
+//! ```
+
 extern crate libc;
 
 mod error;
@@ -54,6 +78,7 @@ where
     sys::list_path(path.as_ref())
 }
 
+/// Extension trait to manipulate extended attributes on `File`-like objects.
 pub trait FileExt: AsRawFd {
     /// Get an extended attribute for the specified file.
     fn get_xattr<N>(&self, name: N) -> io::Result<Option<Vec<u8>>>

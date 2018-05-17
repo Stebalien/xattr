@@ -5,6 +5,7 @@ use std::path::Path;
 
 use UnsupportedPlatformError;
 
+/// An iterator over a set of extended attributes names.
 #[derive(Clone, Debug)]
 pub struct XAttrs;
 

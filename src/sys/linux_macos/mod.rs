@@ -21,6 +21,8 @@ use libc::{c_char, c_void, size_t};
 
 use util::{allocate_loop, name_to_c, path_to_c};
 
+pub const ENOATTR: ::libc::c_int = ::libc::ENOATTR;
+
 /// An iterator over a set of extended attributes names.
 pub struct XAttrs {
     data: Box<[u8]>,

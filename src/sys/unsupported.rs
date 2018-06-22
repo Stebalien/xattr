@@ -5,6 +5,9 @@ use std::path::Path;
 
 use UnsupportedPlatformError;
 
+// Need to use something.
+pub const ENOATTR: ::libc::c_int = 0;
+
 /// An iterator over a set of extended attributes names.
 #[derive(Clone, Debug)]
 pub struct XAttrs;

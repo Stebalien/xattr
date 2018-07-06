@@ -10,8 +10,6 @@ use std::path::Path;
 use libc::{c_char, c_int, c_void, size_t, ssize_t, EPERM};
 use util::{allocate_loop, path_to_c};
 
-pub const ENOATTR: ::libc::c_int = ::libc::ENOATTR;
-
 const EXTATTR_NAMESPACE_USER_STRING: &'static str = "user";
 const EXTATTR_NAMESPACE_SYSTEM_STRING: &'static str = "system";
 const EXTATTR_NAMESPACE_NAMES: [&'static str; 3] = [

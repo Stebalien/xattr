@@ -1,36 +1,34 @@
-#[cfg(any(target_os = "macos", target_os = "linux"))]
-mod linux_macos;
+macro_rules! platforms {
+    ($($($platform:expr);* => $module:ident),*) => {
+        $(
+            #[cfg(any(test, $(target_os = $platform),*))]
+            #[cfg_attr(not(any($(target_os = $platform),*)), allow(dead_code))]
+            mod $module;
 
-#[cfg(any(target_os = "macos", target_os = "linux"))]
-pub use self::linux_macos::*;
+            #[cfg(any($(target_os = $platform),*))]
+            pub use self::$module::*;
+        )*
 
-#[cfg(any(target_os = "freebsd", target_os = "netbsd"))]
-mod bsd;
+        #[cfg(any(test, all(feature = "unsupported", not(any($($(target_os = $platform),*),*)))))]
+        #[cfg_attr(any($($(target_os = $platform),*),*), allow(dead_code))]
+        mod unsupported;
 
-#[cfg(any(target_os = "freebsd", target_os = "netbsd"))]
-pub use self::bsd::*;
+        #[cfg(all(feature = "unsupported", not(any($($(target_os = $platform),*),*))))]
+        pub use self::unsupported::*;
 
-#[cfg(all(feature = "unsupported",
-          not(any(target_os = "freebsd", target_os = "netbsd", target_os = "macos",
-                  target_os = "linux"))))]
-mod unsupported;
+        /// A constant indicating whether or not the target platform is supported.
+        ///
+        /// To make programmer's lives easier, this library builds on all platforms.
+        /// However, all function calls on unsupported platforms will return
+        /// `io::Error`s.
+        ///
+        /// Note: If you would like compilation to simply fail on unsupported platforms,
+        /// turn of the `unsupported` feature.
+        pub const SUPPORTED_PLATFORM: bool = cfg!(any($($(target_os = $platform),*),*));
+    }
+}
 
-#[cfg(all(feature = "unsupported",
-          not(any(target_os = "freebsd", target_os = "netbsd", target_os = "macos",
-                  target_os = "linux"))))]
-pub use self::unsupported::*;
-
-/// A constant indicating whether or not the target platform is supported.
-///
-/// To make programmer's lives easier, this library builds on all platforms.
-/// However, all function calls on unsupported platforms will return
-/// `io::Error`s.
-///
-/// Note: If you would like compilation to simply fail on unsupported platforms,
-/// turn of the `unsupported` feature.
-pub const SUPPORTED_PLATFORM: bool = cfg!(any(
-    target_os = "freebsd",
-    target_os = "netbsd",
-    target_os = "macos",
-    target_os = "linux"
-));
+platforms! {
+    "linux"; "macos" => linux_macos,
+    "freebsd"; "netbsd" => bsd
+}

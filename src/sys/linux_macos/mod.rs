@@ -10,6 +10,11 @@ mod macos;
 #[cfg(target_os = "macos")]
 use self::macos::*;
 
+#[cfg(all(test, not(any(target_os = "linux", target_os = "macos"))))]
+mod dummy;
+#[cfg(all(test, not(any(target_os = "linux", target_os = "macos"))))]
+use self::dummy::*;
+
 use std::ffi::{OsStr, OsString};
 use std::io;
 use std::mem;

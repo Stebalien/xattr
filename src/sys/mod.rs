@@ -1,7 +1,7 @@
 macro_rules! platforms {
     ($($($platform:expr);* => $module:ident),*) => {
         $(
-            #[cfg(any(test, $(target_os = $platform),*))]
+            #[cfg(any($(target_os = $platform),*))]
             #[cfg_attr(not(any($(target_os = $platform),*)), allow(dead_code))]
             mod $module;
 
@@ -12,7 +12,7 @@ macro_rules! platforms {
             pub const ENOATTR: ::libc::c_int = ::libc::ENOATTR;
         )*
 
-        #[cfg(any(test, all(feature = "unsupported", not(any($($(target_os = $platform),*),*)))))]
+        #[cfg(all(feature = "unsupported", not(any($($(target_os = $platform),*),*))))]
         #[cfg_attr(any($($(target_os = $platform),*),*), allow(dead_code))]
         mod unsupported;
 

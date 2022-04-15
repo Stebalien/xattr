@@ -35,6 +35,6 @@ macro_rules! platforms {
 }
 
 platforms! {
-    "linux"; "macos" => linux_macos,
+    "android"; "linux"; "macos" => linux_macos,
     "freebsd"; "netbsd" => bsd
 }

@@ -6,7 +6,7 @@ xattr
 
 A small library for setting, getting, and listing extended attributes.
 
-Supported Platforms: Linux, MacOS, FreeBSD, and NetBSD.
+Supported Platforms: Android, Linux, MacOS, FreeBSD, and NetBSD.
 
 API Documentation: https://stebalien.github.com/xattr/xattr/
 

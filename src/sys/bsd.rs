@@ -8,12 +8,14 @@ use std::os::unix::io::RawFd;
 use std::path::Path;
 
 use libc::{c_int, c_void, size_t, EPERM};
-use util::{allocate_loop, path_to_c};
 
-use libc::{extattr_delete_fd, extattr_get_fd, extattr_list_fd, extattr_set_fd,
-    extattr_delete_link, extattr_get_link, extattr_list_link, extattr_set_link,
-    EXTATTR_NAMESPACE_USER, EXTATTR_NAMESPACE_SYSTEM
+use libc::{
+    extattr_delete_fd, extattr_delete_link, extattr_get_fd, extattr_get_link, extattr_list_fd,
+    extattr_list_link, extattr_set_fd, extattr_set_link, EXTATTR_NAMESPACE_SYSTEM,
+    EXTATTR_NAMESPACE_USER,
 };
+
+use crate::util::{allocate_loop, path_to_c};
 
 const EXTATTR_NAMESPACE_USER_STRING: &'static str = "user";
 const EXTATTR_NAMESPACE_SYSTEM_STRING: &'static str = "system";

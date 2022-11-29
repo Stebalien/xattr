@@ -19,7 +19,7 @@ use std::path::Path;
 
 use libc::{c_char, c_void, size_t};
 
-use util::{allocate_loop, name_to_c, path_to_c};
+use crate::util::{allocate_loop, name_to_c, path_to_c};
 
 /// An iterator over a set of extended attributes names.
 pub struct XAttrs {

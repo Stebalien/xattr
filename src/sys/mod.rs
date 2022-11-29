@@ -9,6 +9,7 @@ macro_rules! platforms {
             pub use self::$module::*;
 
             #[cfg(any($(target_os = $platform),*))]
+            #[allow(deprecated)] // other platforms still use ENOATTR
             pub const ENOATTR: ::libc::c_int = ::libc::ENOATTR;
         )*
 

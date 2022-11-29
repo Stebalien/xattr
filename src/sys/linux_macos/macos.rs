@@ -1,4 +1,4 @@
-use libc::{c_char, c_int, c_void, size_t, ssize_t, uint32_t};
+use libc::{c_char, c_int, c_void, size_t, ssize_t};
 
 const XATTR_NOFOLLOW: c_int = 0x0001;
 
@@ -48,7 +48,7 @@ pub unsafe fn lsetxattr(
     name: *const c_char,
     value: *const c_void,
     size: size_t,
-) -> ssize_t {
+) -> c_int {
     use libc::setxattr;
     setxattr(path, name, value, size, 0, XATTR_NOFOLLOW)
 }

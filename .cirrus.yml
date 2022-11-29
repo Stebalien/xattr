@@ -1,19 +1,50 @@
-freebsd_instance:
-  image: freebsd-11-2-release-amd64
+cargo_cache:
+  folder: $CARGO_HOME/registry
+  fingerprint_script: cat Cargo.lock || echo ""
+
+env:
+  RUSTFLAGS: -D warnings
+  RUSTDOCFLAGS: -D warnings
+
+test: &TEST
+  test_script:
+    - . $HOME/.cargo/env || true
+    - cargo test
+  doc_script:
+    - . $HOME/.cargo/env || true
+    - cargo doc --no-deps
 
 task:
-  name: cargo test
-  # Record some info about the test environment
-  sysinfo_script:
-    - mount
-    - df -h
-    - sysctl hw.model hw.ncpu hw.physmem
-    - freebsd-version
+  name: FreeBSD
+  freebsd_instance:
+    image: freebsd-12-3-release-amd64
   # Install Rust
   setup_script:
     - pkg install -y curl
     - curl https://sh.rustup.rs -sSf --output rustup.sh
     - sh rustup.sh -y
-  test_script:
-    - . $HOME/.cargo/env
-    - cargo test
+  << : *TEST
+  before_cache_script: rm -rf $CARGO_HOME/registry/index
+
+task:
+  name: MacOS
+  env:
+    TARGET: x86_64-apple-darwin
+  osx_instance:
+    image: big-sur-xcode
+  setup_script:
+    - curl --proto '=https' --tlsv1.2 -sSf -o rustup.sh https://sh.rustup.rs
+    - sh rustup.sh -y
+  << : *TEST
+  before_cache_script: rm -rf $CARGO_HOME/registry/index
+
+task:
+  matrix:
+    - name: Linux
+      container:
+        image: rust:latest
+    - name: Linux nightly
+      container:
+        image: rustlang/rust:nightly
+  << : *TEST
+  before_cache_script: rm -rf $CARGO_HOME/registry/index

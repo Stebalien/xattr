@@ -17,7 +17,7 @@ test: &TEST
 task:
   name: FreeBSD
   freebsd_instance:
-    image: freebsd-12-3-release-amd64
+    image: freebsd-12-4-release-amd64
   # Install Rust
   setup_script:
     - pkg install -y curl

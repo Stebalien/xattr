@@ -3,7 +3,7 @@ use std::io;
 use std::os::unix::io::RawFd;
 use std::path::Path;
 
-use UnsupportedPlatformError;
+use crate::UnsupportedPlatformError;
 
 /// An iterator over a set of extended attributes names.
 #[derive(Clone, Debug)]

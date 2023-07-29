@@ -1,8 +1,6 @@
 xattr
 =====
 
-[![CI](https://github.com/Stebalien/xattr/workflows/build/badge.svg)](https://github.com/Stebalien/xattr/workflows/build/badge.svg)
-
 A small library for setting, getting, and listing extended attributes.
 
 Supported Platforms: Android, Linux, MacOS, FreeBSD, and NetBSD.

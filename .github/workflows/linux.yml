@@ -1,0 +1,13 @@
+on: [push]
+
+name: linux
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dtolnay/rust-toolchain@stable
+    - run: cargo build --verbose
+    - run: cargo test --verbose

@@ -4,7 +4,7 @@ use std::ffi::{CString, OsStr, OsString};
 use std::io;
 use std::mem;
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
-use std::os::unix::io::RawFd;
+use std::os::unix::io::{BorrowedFd, AsRawFd};
 use std::path::Path;
 
 use libc::{c_int, c_void, size_t, EPERM};
@@ -15,15 +15,22 @@ use libc::{
     EXTATTR_NAMESPACE_USER,
 };
 
-use crate::util::{allocate_loop, path_to_c};
+use crate::util::allocate_loop;
 
-const EXTATTR_NAMESPACE_USER_STRING: &'static str = "user";
-const EXTATTR_NAMESPACE_SYSTEM_STRING: &'static str = "system";
-const EXTATTR_NAMESPACE_NAMES: [&'static str; 3] = [
+const EXTATTR_NAMESPACE_USER_STRING: &str = "user";
+const EXTATTR_NAMESPACE_SYSTEM_STRING: &str = "system";
+const EXTATTR_NAMESPACE_NAMES: [&str; 3] = [
     "empty",
     EXTATTR_NAMESPACE_USER_STRING,
     EXTATTR_NAMESPACE_SYSTEM_STRING,
 ];
+
+fn path_to_c(path: &Path) -> io::Result<CString> {
+    match CString::new(path.as_os_str().as_bytes()) {
+        Ok(name) => Ok(name),
+        Err(_) => Err(io::Error::new(io::ErrorKind::NotFound, "file not found")),
+    }
+}
 
 /// An iterator over a set of extended attributes names.
 pub struct XAttrs {
@@ -145,20 +152,28 @@ fn prefix_namespace(attr: &OsStr, ns: c_int) -> OsString {
     OsString::from_vec(v)
 }
 
-pub fn get_fd(fd: RawFd, name: &OsStr) -> io::Result<Vec<u8>> {
+fn cvt(res: libc::ssize_t) -> rustix::io::Result<usize> {
+    if res < 0 {
+        Err(rustix::io::Errno::from_raw_os_error(-(res as i32)))
+    } else {
+        Ok(res as usize)
+    }
+}
+
+pub fn get_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<Vec<u8>> {
     let (ns, name) = name_to_ns(name)?;
     unsafe {
-        allocate_loop(|buf, len| {
-            extattr_get_fd(fd, ns, name.as_ptr(), buf as *mut c_void, len as size_t)
+        allocate_loop(|buf| {
+            cvt(extattr_get_fd(fd.as_raw_fd(), ns, name.as_ptr(), buf.as_mut_ptr() as *mut c_void, buf.len() as size_t))
         })
     }
 }
 
-pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
+pub fn set_fd(fd: BorrowedFd<'_>, name: &OsStr, value: &[u8]) -> io::Result<()> {
     let (ns, name) = name_to_ns(name)?;
     let ret = unsafe {
         extattr_set_fd(
-            fd,
+            fd.as_raw_fd(),
             ns,
             name.as_ptr(),
             value.as_ptr() as *const c_void,
@@ -172,9 +187,9 @@ pub fn set_fd(fd: RawFd, name: &OsStr, value: &[u8]) -> io::Result<()> {
     }
 }
 
-pub fn remove_fd(fd: RawFd, name: &OsStr) -> io::Result<()> {
+pub fn remove_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<()> {
     let (ns, name) = name_to_ns(name)?;
-    let ret = unsafe { extattr_delete_fd(fd, ns, name.as_ptr()) };
+    let ret = unsafe { extattr_delete_fd(fd.as_raw_fd(), ns, name.as_ptr()) };
     if ret != 0 {
         Err(io::Error::last_os_error())
     } else {
@@ -182,15 +197,15 @@ pub fn remove_fd(fd: RawFd, name: &OsStr) -> io::Result<()> {
     }
 }
 
-pub fn list_fd(fd: RawFd) -> io::Result<XAttrs> {
+pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     let sysvec = unsafe {
-        let res = allocate_loop(|buf, len| {
-            extattr_list_fd(
-                fd,
+        let res = allocate_loop(|buf| {
+            cvt(extattr_list_fd(
+                fd.as_raw_fd(),
                 EXTATTR_NAMESPACE_SYSTEM,
-                buf as *mut c_void,
-                len as size_t,
-            )
+                buf.as_mut_ptr() as *mut c_void,
+                buf.len() as size_t,
+            ))
         });
         // On FreeBSD, system attributes require root privileges to view. However,
         // to mimic the behavior of listxattr in linux and osx, we need to query
@@ -208,13 +223,13 @@ pub fn list_fd(fd: RawFd) -> io::Result<XAttrs> {
     };
 
     let uservec = unsafe {
-        let res = allocate_loop(|buf, len| {
-            extattr_list_fd(
-                fd,
+        let res = allocate_loop(|buf| {
+            cvt(extattr_list_fd(
+                fd.as_raw_fd(),
                 EXTATTR_NAMESPACE_USER,
-                buf as *mut c_void,
-                len as size_t,
-            )
+                buf.as_mut_ptr() as *mut c_void,
+                buf.len() as size_t,
+            ))
         });
         match res {
             Ok(v) => v,
@@ -233,14 +248,14 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
     let (ns, name) = name_to_ns(name)?;
     let path = path_to_c(path)?;
     unsafe {
-        allocate_loop(|buf, len| {
-            extattr_get_link(
+        allocate_loop(|buf| {
+            cvt(extattr_get_link(
                 path.as_ptr(),
                 ns,
                 name.as_ptr(),
-                buf as *mut c_void,
-                len as size_t,
-            )
+                buf.as_mut_ptr() as *mut c_void,
+                buf.len() as size_t,
+            ))
         })
     }
 }
@@ -278,13 +293,13 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
 pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     let path = path_to_c(path)?;
     let sysvec = unsafe {
-        let res = allocate_loop(|buf, len| {
-            extattr_list_link(
+        let res = allocate_loop(|buf| {
+            cvt(extattr_list_link(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_SYSTEM,
-                buf as *mut c_void,
-                len as size_t,
-            )
+                buf.as_mut_ptr() as *mut c_void,
+                buf.len() as size_t,
+            ))
         });
         // On FreeBSD, system attributes require root privileges to view. However,
         // to mimic the behavior of listxattr in linux and osx, we need to query
@@ -302,13 +317,13 @@ pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     };
 
     let uservec = unsafe {
-        let res = allocate_loop(|buf, len| {
-            extattr_list_link(
+        let res = allocate_loop(|buf| {
+            cvt(extattr_list_link(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_USER,
-                buf as *mut c_void,
-                len as size_t,
-            )
+                buf.as_mut_ptr() as *mut c_void,
+                buf.len() as size_t,
+            ))
         });
         match res {
             Ok(v) => v,

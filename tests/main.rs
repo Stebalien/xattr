@@ -106,7 +106,7 @@ fn test_multi() {
     for it in tmp
         .list_xattr()
         .unwrap()
-        .filter(|x| x.as_bytes().starts_with(&*b"user."))
+        .filter(|x| x.as_bytes().starts_with(b"user."))
     {
         assert!(items.remove(&*it));
     }

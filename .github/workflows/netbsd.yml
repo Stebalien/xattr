@@ -14,11 +14,11 @@ name: netbsd
 
 jobs:
   test:
-    runs-on: macos-12
+    runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run tests in NetBSD VM
-      uses: vmactions/netbsd-vm@v0
+      uses: vmactions/netbsd-vm@v1
       with:
         usesh: true
         prepare: |

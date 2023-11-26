@@ -4,10 +4,25 @@ use std::mem;
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::io::BorrowedFd;
 use std::path::Path;
+use std::slice;
 
 use rustix::fs as rfs;
 
 use crate::util::allocate_loop;
+
+use std::os::raw::c_char;
+
+// Convert an `&mut [u8]` to an `&mut [c_char]`
+#[inline]
+fn as_list_buffer(buf: &mut [u8]) -> &mut [c_char] {
+    // SAFETY: u8 and i8 have the same size and alignment
+    unsafe {
+        slice::from_raw_parts_mut(
+            buf.as_mut_ptr() as *mut c_char,
+            buf.len()
+        )
+    }
+}
 
 /// An iterator over a set of extended attributes names.
 pub struct XAttrs {
@@ -75,7 +90,7 @@ pub fn remove_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<()> {
 
 pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     let vec = allocate_loop(|buf| {
-        rfs::flistxattr(fd, buf)
+        rfs::flistxattr(fd, as_list_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),
@@ -101,7 +116,7 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
 
 pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     let vec = allocate_loop(|buf| {
-        rfs::llistxattr(path, buf)
+        rfs::llistxattr(path, as_list_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),

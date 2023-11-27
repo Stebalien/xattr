@@ -14,7 +14,7 @@ use std::os::raw::c_char;
 
 // Convert an `&mut [u8]` to an `&mut [c_char]`
 #[inline]
-fn as_list_buffer(buf: &mut [u8]) -> &mut [c_char] {
+fn as_listxattr_buffer(buf: &mut [u8]) -> &mut [c_char] {
     // SAFETY: u8 and i8 have the same size and alignment
     unsafe {
         slice::from_raw_parts_mut(
@@ -90,7 +90,7 @@ pub fn remove_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<()> {
 
 pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     let vec = allocate_loop(|buf| {
-        rfs::flistxattr(fd, as_list_buffer(buf))
+        rfs::flistxattr(fd, as_listxattr_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),
@@ -116,7 +116,7 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
 
 pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     let vec = allocate_loop(|buf| {
-        rfs::llistxattr(path, as_list_buffer(buf))
+        rfs::llistxattr(path, as_listxattr_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),

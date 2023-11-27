@@ -6,6 +6,7 @@ use std::mem;
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::os::unix::io::{BorrowedFd, AsRawFd};
 use std::path::Path;
+use std::ptr;
 
 use libc::{c_int, c_void, size_t, EPERM};
 
@@ -29,6 +30,18 @@ fn path_to_c(path: &Path) -> io::Result<CString> {
     match CString::new(path.as_os_str().as_bytes()) {
         Ok(name) => Ok(name),
         Err(_) => Err(io::Error::new(io::ErrorKind::NotFound, "file not found")),
+    }
+}
+
+#[inline]
+fn slice_parts(buf: &mut [u8]) -> (*mut c_void, size_t) {
+    if buf.is_empty() {
+        (ptr::null_mut(), 0)
+    } else {
+        (
+            buf.as_mut_ptr().cast(),
+            buf.len() as size_t
+        )
     }
 }
 
@@ -164,7 +177,8 @@ pub fn get_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<Vec<u8>> {
     let (ns, name) = name_to_ns(name)?;
     unsafe {
         allocate_loop(|buf| {
-            cvt(extattr_get_fd(fd.as_raw_fd(), ns, name.as_ptr(), buf.as_mut_ptr() as *mut c_void, buf.len() as size_t))
+            let (ptr, len) = slice_parts(buf);
+            cvt(extattr_get_fd(fd.as_raw_fd(), ns, name.as_ptr(), ptr, len))
         })
     }
 }
@@ -200,11 +214,11 @@ pub fn remove_fd(fd: BorrowedFd<'_>, name: &OsStr) -> io::Result<()> {
 pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     let sysvec = unsafe {
         let res = allocate_loop(|buf| {
+            let (ptr, len) = slice_parts(buf);
             cvt(extattr_list_fd(
                 fd.as_raw_fd(),
                 EXTATTR_NAMESPACE_SYSTEM,
-                buf.as_mut_ptr() as *mut c_void,
-                buf.len() as size_t,
+                ptr, len
             ))
         });
         // On FreeBSD, system attributes require root privileges to view. However,
@@ -224,11 +238,11 @@ pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
 
     let uservec = unsafe {
         let res = allocate_loop(|buf| {
+            let (ptr, len) = slice_parts(buf);
             cvt(extattr_list_fd(
                 fd.as_raw_fd(),
                 EXTATTR_NAMESPACE_USER,
-                buf.as_mut_ptr() as *mut c_void,
-                buf.len() as size_t,
+                ptr, len
             ))
         });
         match res {
@@ -249,12 +263,12 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
     let path = path_to_c(path)?;
     unsafe {
         allocate_loop(|buf| {
+            let (ptr, len) = slice_parts(buf);
             cvt(extattr_get_link(
                 path.as_ptr(),
                 ns,
                 name.as_ptr(),
-                buf.as_mut_ptr() as *mut c_void,
-                buf.len() as size_t,
+                ptr, len
             ))
         })
     }
@@ -294,11 +308,11 @@ pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     let path = path_to_c(path)?;
     let sysvec = unsafe {
         let res = allocate_loop(|buf| {
+            let (ptr, len) = slice_parts(buf);
             cvt(extattr_list_link(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_SYSTEM,
-                buf.as_mut_ptr() as *mut c_void,
-                buf.len() as size_t,
+                ptr, len
             ))
         });
         // On FreeBSD, system attributes require root privileges to view. However,
@@ -318,11 +332,11 @@ pub fn list_path(path: &Path) -> io::Result<XAttrs> {
 
     let uservec = unsafe {
         let res = allocate_loop(|buf| {
+            let (ptr, len) = slice_parts(buf);
             cvt(extattr_list_link(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_USER,
-                buf.as_mut_ptr() as *mut c_void,
-                buf.len() as size_t,
+                ptr, len
             ))
         });
         match res {

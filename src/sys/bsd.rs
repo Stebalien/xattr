@@ -152,9 +152,9 @@ fn prefix_namespace(attr: &OsStr, ns: c_int) -> OsString {
     OsString::from_vec(v)
 }
 
-fn cvt(res: libc::ssize_t) -> rustix::io::Result<usize> {
+fn cvt(res: libc::ssize_t) -> io::Result<usize> {
     if res < 0 {
-        Err(rustix::io::Errno::from_raw_os_error(-(res as i32)))
+        Err(io::Error::last_os_error())
     } else {
         Ok(res as usize)
     }

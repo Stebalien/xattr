@@ -1,8 +1,10 @@
 use std::io;
 
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
-    #[cfg(not(any(target_os = "freebsd", target_os = "netbsd")))]
+    #[cfg(target_os = "linux")]
     const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();
+    #[cfg(target_os = "macos")]
+    const ENOATTR: i32 = rustix::io::Errno::NOATTR.raw_os_error();
     #[cfg(any(target_os = "freebsd", target_os = "netbsd"))]
     const ENOATTR: i32 = libc::ENOATTR;
 

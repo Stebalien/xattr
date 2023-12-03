@@ -4,9 +4,9 @@ use std::mem;
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::io::BorrowedFd;
 use std::path::Path;
-use std::slice;
 
 use rustix::fs as rfs;
+use rustix::path::Arg;
 
 use crate::util::allocate_loop;
 
@@ -17,10 +17,7 @@ use std::os::raw::c_char;
 fn as_listxattr_buffer(buf: &mut [u8]) -> &mut [c_char] {
     // SAFETY: u8 and i8 have the same size and alignment
     unsafe {
-        slice::from_raw_parts_mut(
-            buf.as_mut_ptr() as *mut c_char,
-            buf.len()
-        )
+        &mut *(buf as *mut [u8] as *mut [c_char])
     }
 }
 
@@ -99,8 +96,36 @@ pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
 }
 
 pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
+    let path = path.into_c_str()?;
+    let name = name.into_c_str()?;
+
     allocate_loop(|buf| {
-        rfs::lgetxattr(path, name, buf)
+        #[cfg(target_os = "macos")]
+        {
+            // If an empty slice is passed to lgetxattr on macOS, it returns an error.
+            // Might be a macOS bug, so work around it here by calling the libc manually.
+            if buf.is_empty() {
+                let ret = unsafe {
+                    libc::getxattr(
+                        (&*path).as_ptr(),
+                        (&*name).as_ptr(),
+                        std::ptr::null_mut(),
+                        0,
+                        0,
+                        libc::XATTR_NOFOLLOW
+                    )
+                };
+
+                if ret < 0 {
+                    return Err(io::Error::last_os_error());
+                } else {
+                    return Ok(ret as usize);
+                }
+            }
+        }
+
+        let size = rfs::lgetxattr(&*path, &*name, buf)?;
+        io::Result::Ok(size)
     })
 }
 
@@ -115,8 +140,9 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
 }
 
 pub fn list_path(path: &Path) -> io::Result<XAttrs> {
+    let path = path.as_cow_c_str()?;
     let vec = allocate_loop(|buf| {
-        rfs::llistxattr(path, as_listxattr_buffer(buf))
+        rfs::llistxattr(&*path, as_listxattr_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),

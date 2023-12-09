@@ -21,7 +21,7 @@ default = ["unsupported"]
 unsupported = []
 
 [dependencies.rustix]
-version = "0.38.25"
+version = "0.38.28"
 default-features = false
 features = ["fs", "std"]
 
@@ -35,4 +35,5 @@ features = ["std"]
 libc = "0.2.150"
 
 [dev-dependencies]
+rustix = { version = "0.38.28", default-features = false, features = ["net"] }
 tempfile = "3"

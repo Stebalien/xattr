@@ -7,6 +7,10 @@ macro_rules! platforms {
 
             #[cfg(any($(target_os = $platform),*))]
             pub use self::$module::*;
+
+            #[cfg(any($(target_os = $platform),*))]
+            #[allow(deprecated)] // other platforms still use ENOATTR
+            pub const ENOATTR: ::libc::c_int = ::libc::ENOATTR;
         )*
 
         #[cfg(all(feature = "unsupported", not(any($($(target_os = $platform),*),*))))]
@@ -15,6 +19,9 @@ macro_rules! platforms {
 
         #[cfg(all(feature = "unsupported", not(any($($(target_os = $platform),*),*))))]
         pub use self::unsupported::*;
+        #[cfg(all(feature = "unsupported", not(any($($(target_os = $platform),*),*))))]
+        pub const ENOATTR: ::libc::c_int = 0;
+
 
         /// A constant indicating whether or not the target platform is supported.
         ///

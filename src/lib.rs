@@ -33,7 +33,7 @@ mod util;
 use std::ffi::OsStr;
 use std::fs::File;
 use std::io;
-use std::os::unix::io::AsRawFd;
+use std::os::unix::io::{AsRawFd, BorrowedFd};
 use std::path::Path;
 
 pub use error::UnsupportedPlatformError;
@@ -84,7 +84,9 @@ pub trait FileExt: AsRawFd {
     where
         N: AsRef<OsStr>,
     {
-        util::extract_noattr(sys::get_fd(self.as_raw_fd(), name.as_ref()))
+        // SAFETY: Implement I/O safety later.
+        let fd = unsafe { BorrowedFd::borrow_raw(self.as_raw_fd()) };
+        util::extract_noattr(sys::get_fd(fd, name.as_ref()))
     }
 
     /// Set an extended attribute on the specified file.
@@ -92,7 +94,8 @@ pub trait FileExt: AsRawFd {
     where
         N: AsRef<OsStr>,
     {
-        sys::set_fd(self.as_raw_fd(), name.as_ref(), value)
+        let fd = unsafe { BorrowedFd::borrow_raw(self.as_raw_fd()) };
+        sys::set_fd(fd, name.as_ref(), value)
     }
 
     /// Remove an extended attribute from the specified file.
@@ -100,7 +103,8 @@ pub trait FileExt: AsRawFd {
     where
         N: AsRef<OsStr>,
     {
-        sys::remove_fd(self.as_raw_fd(), name.as_ref())
+        let fd = unsafe { BorrowedFd::borrow_raw(self.as_raw_fd()) };
+        sys::remove_fd(fd, name.as_ref())
     }
 
     /// List extended attributes attached to the specified file.
@@ -108,7 +112,8 @@ pub trait FileExt: AsRawFd {
     /// Note: this may not list *all* attributes. Speficially, it definitely won't list any trusted
     /// attributes unless you are root and it may not list system attributes.
     fn list_xattr(&self) -> io::Result<XAttrs> {
-        sys::list_fd(self.as_raw_fd())
+        let fd = unsafe { BorrowedFd::borrow_raw(self.as_raw_fd()) };
+        sys::list_fd(fd)
     }
 }
 

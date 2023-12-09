@@ -1,6 +1,6 @@
 use std::ffi::{OsStr, OsString};
 use std::io;
-use std::os::unix::io::RawFd;
+use std::os::unix::io::BorrowedFd;
 use std::path::Path;
 
 use crate::UnsupportedPlatformError;
@@ -20,28 +20,28 @@ impl Iterator for XAttrs {
     }
 }
 
-pub fn get_fd(_: RawFd, _: &OsStr) -> io::Result<Vec<u8>> {
+pub fn get_fd(_: BorrowedFd<'_>, _: &OsStr) -> io::Result<Vec<u8>> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn set_fd(_: RawFd, _: &OsStr, _: &[u8]) -> io::Result<()> {
+pub fn set_fd(_: BorrowedFd<'_>, _: &OsStr, _: &[u8]) -> io::Result<()> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn remove_fd(_: RawFd, _: &OsStr) -> io::Result<()> {
+pub fn remove_fd(_: BorrowedFd<'_>, _: &OsStr) -> io::Result<()> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn list_fd(_: RawFd) -> io::Result<XAttrs> {
+pub fn list_fd(_: BorrowedFd<'_>) -> io::Result<XAttrs> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,

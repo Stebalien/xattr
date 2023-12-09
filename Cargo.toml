@@ -20,19 +20,8 @@ default = ["unsupported"]
 # platforms. This would make sense if you absolutely need xattr support.
 unsupported = []
 
-[dependencies.rustix]
-version = "0.38.25"
-default-features = false
-features = ["fs", "std"]
-
-# Enable the `std` feature here so that `std::os::raw` is used.
-[target.'cfg(target_os = "linux")'.dependencies.linux-raw-sys]
-version = "0.4.11"
-default-features = false
-features = ["std"]
-
-[target.'cfg(any(target_os = "macos", target_os = "freebsd", target_os = "netbsd"))'.dependencies]
-libc = "0.2.150"
+[dependencies]
+libc = "0.2.147"
 
 [dev-dependencies]
 tempfile = "3"

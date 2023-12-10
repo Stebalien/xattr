@@ -1,5 +1,11 @@
 use std::io;
 
+#[cfg(any(
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "freebsd",
+    target_os = "netbsd"
+))]
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
     #[cfg(target_os = "linux")]
     const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();
@@ -17,6 +23,35 @@ pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>
     })
 }
 
+#[cfg(not(any(
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "freebsd",
+    target_os = "netbsd"
+)))]
+pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
+    // These are always expected to be unsupported.
+    match result {
+        Ok(result) => {
+            panic!("unexpected success on unsupported platform: {:?}", result);
+        }
+        Err(error) => {
+            assert_eq!(
+                error.kind(),
+                io::ErrorKind::Unsupported,
+                "xattrs are not supported on this platform"
+            );
+            Err(error)
+        }
+    }
+}
+
+#[cfg(any(
+    target_os = "linux",
+    target_os = "macos",
+    target_os = "freebsd",
+    target_os = "netbsd"
+))]
 pub fn allocate_loop<E, F: FnMut(&mut [u8]) -> Result<usize, E>>(mut f: F) -> io::Result<Vec<u8>>
 where
     io::Error: From<E>,

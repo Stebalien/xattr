@@ -1,7 +1,7 @@
 use std::io;
 
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
-    #[cfg(target_os = "linux")]
+    #[cfg(any(target_os = "linux", target_os = "android"))]
     const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();
     #[cfg(target_os = "macos")]
     const ENOATTR: i32 = rustix::io::Errno::NOATTR.raw_os_error();

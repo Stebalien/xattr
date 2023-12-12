@@ -5,6 +5,8 @@ use std::path::Path;
 
 use crate::UnsupportedPlatformError;
 
+pub const ENOATTR: i32 = 0;
+
 /// An iterator over a set of extended attributes names.
 #[derive(Clone, Debug)]
 pub struct XAttrs;

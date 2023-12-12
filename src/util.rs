@@ -1,15 +1,8 @@
 use std::io;
 
 pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>> {
-    #[cfg(any(target_os = "linux", target_os = "android"))]
-    const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();
-    #[cfg(target_os = "macos")]
-    const ENOATTR: i32 = rustix::io::Errno::NOATTR.raw_os_error();
-    #[cfg(any(target_os = "freebsd", target_os = "netbsd"))]
-    const ENOATTR: i32 = libc::ENOATTR;
-
     result.map(Some).or_else(|e| {
-        if e.raw_os_error() == Some(ENOATTR) {
+        if e.raw_os_error() == Some(crate::sys::ENOATTR) {
             Ok(None)
         } else {
             Err(e)
@@ -17,6 +10,7 @@ pub fn extract_noattr(result: io::Result<Vec<u8>>) -> io::Result<Option<Vec<u8>>
     })
 }
 
+#[allow(dead_code)]
 pub fn allocate_loop<E, F: FnMut(&mut [u8]) -> Result<usize, E>>(mut f: F) -> io::Result<Vec<u8>>
 where
     io::Error: From<E>,

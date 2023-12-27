@@ -21,7 +21,7 @@ default = ["unsupported"]
 unsupported = []
 
 [dependencies.rustix]
-version = "0.38.28"
+version = "0.38.29"
 default-features = false
 features = ["fs", "std"]
 
@@ -31,7 +31,7 @@ version = "0.4.11"
 default-features = false
 features = ["std"]
 
-[target.'cfg(any(target_os = "macos", target_os = "freebsd", target_os = "netbsd"))'.dependencies]
+[target.'cfg(any(target_os = "freebsd", target_os = "netbsd"))'.dependencies]
 libc = "0.2.150"
 
 [dev-dependencies]

@@ -106,32 +106,7 @@ pub fn get_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<Vec<u8>> {
     let name = name.into_c_str()?;
 
     allocate_loop(|buf| {
-        #[cfg(target_os = "macos")]
-        {
-            // If an empty slice is passed to lgetxattr on macOS, it returns an error.
-            // Might be a macOS bug, so work around it here by calling the libc manually.
-            if buf.is_empty() {
-                let ret = unsafe {
-                    libc::getxattr(
-                        (&*path).as_ptr(),
-                        (&*name).as_ptr(),
-                        std::ptr::null_mut(),
-                        0,
-                        0,
-                        if deref { 0 } else { libc::XATTR_NOFOLLOW },
-                    )
-                };
-
-                if ret < 0 {
-                    return Err(io::Error::last_os_error());
-                } else {
-                    return Ok(ret as usize);
-                }
-            }
-        }
-
-        let getxattr_func = if deref { rfs::getxattr } else { rfs::lgetxattr };
-        let size = getxattr_func(&*path, &*name, buf)?;
+        let size = rfs::lgetxattr(&*path, &*name, buf)?;
         io::Result::Ok(size)
     })
 }

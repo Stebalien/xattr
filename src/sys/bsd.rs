@@ -11,9 +11,11 @@ use std::ptr;
 use libc::{c_int, c_void, size_t, EPERM};
 
 use libc::{
-    extattr_delete_fd, extattr_delete_link, extattr_get_fd, extattr_get_link, extattr_list_fd,
-    extattr_list_link, extattr_set_fd, extattr_set_link, EXTATTR_NAMESPACE_SYSTEM,
-    EXTATTR_NAMESPACE_USER,
+    extattr_delete_fd, extattr_delete_link, extattr_delete_file,
+    extattr_get_fd, extattr_get_link, extattr_get_file,
+    extattr_list_fd, extattr_list_link, extattr_list_file,
+    extattr_set_fd, extattr_set_link, extattr_set_file,
+    EXTATTR_NAMESPACE_SYSTEM, EXTATTR_NAMESPACE_USER,
 };
 
 use crate::util::allocate_loop;
@@ -260,13 +262,14 @@ pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     })
 }
 
-pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
+pub fn get_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<Vec<u8>> {
     let (ns, name) = name_to_ns(name)?;
     let path = path_to_c(path)?;
+    let extattr_get_func = if deref { extattr_get_file } else { extattr_get_link };
     unsafe {
         allocate_loop(|buf| {
             let (ptr, len) = slice_parts(buf);
-            cvt(extattr_get_link(
+            cvt(extattr_get_func(
                 path.as_ptr(),
                 ns,
                 name.as_ptr(),
@@ -276,11 +279,12 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
     }
 }
 
-pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
+pub fn set_path(path: &Path, name: &OsStr, value: &[u8], deref: bool) -> io::Result<()> {
     let (ns, name) = name_to_ns(name)?;
     let path = path_to_c(path)?;
+    let extattr_set_func = if deref { extattr_set_file } else { extattr_set_link };
     let ret = unsafe {
-        extattr_set_link(
+        extattr_set_func(
             path.as_ptr(),
             ns,
             name.as_ptr(),
@@ -295,10 +299,11 @@ pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
     }
 }
 
-pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
+pub fn remove_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<()> {
     let (ns, name) = name_to_ns(name)?;
     let path = path_to_c(path)?;
-    let ret = unsafe { extattr_delete_link(path.as_ptr(), ns, name.as_ptr()) };
+    let extattr_delete_func = if deref { extattr_delete_file } else { extattr_delete_link };
+    let ret = unsafe { extattr_delete_func(path.as_ptr(), ns, name.as_ptr()) };
     if ret != 0 {
         Err(io::Error::last_os_error())
     } else {
@@ -306,12 +311,13 @@ pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
     }
 }
 
-pub fn list_path(path: &Path) -> io::Result<XAttrs> {
+pub fn list_path(path: &Path, deref: bool) -> io::Result<XAttrs> {
     let path = path_to_c(path)?;
+    let extattr_list_func = if deref { extattr_list_file } else { extattr_list_link };
     let sysvec = unsafe {
         let res = allocate_loop(|buf| {
             let (ptr, len) = slice_parts(buf);
-            cvt(extattr_list_link(
+            cvt(extattr_list_func(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_SYSTEM,
                 ptr, len
@@ -335,7 +341,7 @@ pub fn list_path(path: &Path) -> io::Result<XAttrs> {
     let uservec = unsafe {
         let res = allocate_loop(|buf| {
             let (ptr, len) = slice_parts(buf);
-            cvt(extattr_list_link(
+            cvt(extattr_list_func(
                 path.as_ptr(),
                 EXTATTR_NAMESPACE_USER,
                 ptr, len

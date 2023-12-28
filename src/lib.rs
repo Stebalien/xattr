@@ -8,9 +8,9 @@
 //! An extension trait [`FileExt`] is provided to directly work with
 //! standard `File` objects and file descriptors.
 //!
-//! NOTE: In case of a symlink as path argument, all methods
-//! in this library work on the symlink itself **without**
-//! de-referencing it.
+//! If the path argument is a symlink, the get/set/list/remove functions
+//! operate on the symlink itself. To operate on the symlink target, use
+//! the _deref variant of these functions.
 //!
 //! ```rust
 //! let mut xattrs = xattr::list("/").unwrap().peekable();
@@ -45,7 +45,16 @@ where
     P: AsRef<Path>,
     N: AsRef<OsStr>,
 {
-    util::extract_noattr(sys::get_path(path.as_ref(), name.as_ref()))
+    util::extract_noattr(sys::get_path(path.as_ref(), name.as_ref(), false))
+}
+
+/// Get an extended attribute for the specified file (dereference symlinks).
+pub fn get_deref<N, P>(path: P, name: N) -> io::Result<Option<Vec<u8>>>
+where
+    P: AsRef<Path>,
+    N: AsRef<OsStr>,
+{
+    util::extract_noattr(sys::get_path(path.as_ref(), name.as_ref(), true))
 }
 
 /// Set an extended attribute on the specified file.
@@ -54,7 +63,16 @@ where
     P: AsRef<Path>,
     N: AsRef<OsStr>,
 {
-    sys::set_path(path.as_ref(), name.as_ref(), value)
+    sys::set_path(path.as_ref(), name.as_ref(), value, false)
+}
+
+/// Set an extended attribute on the specified file (dereference symlinks).
+pub fn set_deref<N, P>(path: P, name: N, value: &[u8]) -> io::Result<()>
+where
+    P: AsRef<Path>,
+    N: AsRef<OsStr>,
+{
+    sys::set_path(path.as_ref(), name.as_ref(), value, true)
 }
 
 /// Remove an extended attribute from the specified file.
@@ -63,7 +81,16 @@ where
     P: AsRef<Path>,
     N: AsRef<OsStr>,
 {
-    sys::remove_path(path.as_ref(), name.as_ref())
+    sys::remove_path(path.as_ref(), name.as_ref(), false)
+}
+
+/// Remove an extended attribute from the specified file (dereference symlinks).
+pub fn remove_deref<N, P>(path: P, name: N) -> io::Result<()>
+where
+    P: AsRef<Path>,
+    N: AsRef<OsStr>,
+{
+    sys::remove_path(path.as_ref(), name.as_ref(), true)
 }
 
 /// List extended attributes attached to the specified file.
@@ -74,7 +101,15 @@ pub fn list<P>(path: P) -> io::Result<XAttrs>
 where
     P: AsRef<Path>,
 {
-    sys::list_path(path.as_ref())
+    sys::list_path(path.as_ref(), false)
+}
+
+/// List extended attributes attached to the specified file (dereference symlinks).
+pub fn list_deref<P>(path: P) -> io::Result<XAttrs>
+where
+    P: AsRef<Path>,
+{
+    sys::list_path(path.as_ref(), true)
 }
 
 /// Extension trait to manipulate extended attributes on `File`-like objects.

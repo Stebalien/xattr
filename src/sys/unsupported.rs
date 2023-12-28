@@ -50,28 +50,28 @@ pub fn list_fd(_: BorrowedFd<'_>) -> io::Result<XAttrs> {
     ))
 }
 
-pub fn get_path(_: &Path, _: &OsStr) -> io::Result<Vec<u8>> {
+pub fn get_path(_: &Path, _: &OsStr, _: bool) -> io::Result<Vec<u8>> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn set_path(_: &Path, _: &OsStr, _: &[u8]) -> io::Result<()> {
+pub fn set_path(_: &Path, _: &OsStr, _: &[u8], _: bool) -> io::Result<()> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn remove_path(_: &Path, _: &OsStr) -> io::Result<()> {
+pub fn remove_path(_: &Path, _: &OsStr, _: bool) -> io::Result<()> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,
     ))
 }
 
-pub fn list_path(_: &Path) -> io::Result<XAttrs> {
+pub fn list_path(_: &Path, _: bool) -> io::Result<XAttrs> {
     Err(io::Error::new(
         io::ErrorKind::Unsupported,
         UnsupportedPlatformError,

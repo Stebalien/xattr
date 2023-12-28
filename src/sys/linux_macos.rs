@@ -101,7 +101,7 @@ pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     })
 }
 
-pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
+pub fn get_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<Vec<u8>> {
     let path = path.into_c_str()?;
     let name = name.into_c_str()?;
 
@@ -118,7 +118,7 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
                         std::ptr::null_mut(),
                         0,
                         0,
-                        libc::XATTR_NOFOLLOW
+                        if deref { 0 } else { libc::XATTR_NOFOLLOW },
                     )
                 };
 
@@ -130,25 +130,29 @@ pub fn get_path(path: &Path, name: &OsStr) -> io::Result<Vec<u8>> {
             }
         }
 
-        let size = rfs::lgetxattr(&*path, &*name, buf)?;
+        let getxattr_func = if deref { rfs::getxattr } else { rfs::lgetxattr };
+        let size = getxattr_func(&*path, &*name, buf)?;
         io::Result::Ok(size)
     })
 }
 
-pub fn set_path(path: &Path, name: &OsStr, value: &[u8]) -> io::Result<()> {
-    rfs::lsetxattr(path, name, value, rfs::XattrFlags::empty())?;
+pub fn set_path(path: &Path, name: &OsStr, value: &[u8], deref: bool) -> io::Result<()> {
+    let setxattr_func = if deref { rfs::setxattr } else { rfs::lsetxattr };
+    setxattr_func(path, name, value, rfs::XattrFlags::empty())?;
     Ok(())
 }
 
-pub fn remove_path(path: &Path, name: &OsStr) -> io::Result<()> {
-    rfs::lremovexattr(path, name)?;
+pub fn remove_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<()> {
+    let removexattr_func = if deref { rfs::removexattr } else { rfs::lremovexattr };
+    removexattr_func(path, name)?;
     Ok(())
 }
 
-pub fn list_path(path: &Path) -> io::Result<XAttrs> {
+pub fn list_path(path: &Path, deref: bool) -> io::Result<XAttrs> {
+    let listxattr_func = if deref { rfs::listxattr } else { rfs::llistxattr };
     let path = path.as_cow_c_str()?;
     let vec = allocate_loop(|buf| {
-        rfs::llistxattr(&*path, as_listxattr_buffer(buf))
+        listxattr_func(&*path, as_listxattr_buffer(buf))
     })?;
     Ok(XAttrs {
         data: vec.into_boxed_slice(),

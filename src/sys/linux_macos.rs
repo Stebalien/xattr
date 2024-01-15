@@ -106,7 +106,8 @@ pub fn get_path(path: &Path, name: &OsStr, deref: bool) -> io::Result<Vec<u8>> {
     let name = name.into_c_str()?;
 
     allocate_loop(|buf| {
-        let size = rfs::lgetxattr(&*path, &*name, buf)?;
+        let getxattr_func = if deref { rfs::getxattr } else { rfs::lgetxattr };
+        let size = getxattr_func(&*path, &*name, buf)?;
         io::Result::Ok(size)
     })
 }

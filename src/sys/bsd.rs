@@ -44,6 +44,7 @@ fn slice_parts(buf: &mut [u8]) -> (*mut c_void, size_t) {
 }
 
 /// An iterator over a set of extended attributes names.
+#[derive(Default)]
 pub struct XAttrs {
     user_attrs: Box<[u8]>,
     system_attrs: Box<[u8]>,

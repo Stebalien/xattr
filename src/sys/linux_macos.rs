@@ -26,6 +26,7 @@ fn as_listxattr_buffer(buf: &mut [u8]) -> &mut [c_char] {
 }
 
 /// An iterator over a set of extended attributes names.
+#[derive(Default)]
 pub struct XAttrs {
     data: Box<[u8]>,
     offset: usize,

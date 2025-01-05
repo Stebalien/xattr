@@ -87,6 +87,28 @@ fn test_missing() {
 
 #[test]
 #[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+fn test_debug() {
+    // Only works on "real" filesystems.
+    let tmp = tempfile_in("/var/tmp").unwrap();
+
+    tmp.set_xattr("user.myattr", b"value").unwrap();
+    let mut attrs = tmp.list_xattr().unwrap();
+
+    // Debug is idempotent
+    assert_eq!(format!("{:?}", attrs), format!("{:?}", attrs));
+
+    // It produces the right value.
+    assert_eq!(r#"XAttrs(["user.myattr"])"#, format!("{:?}", attrs));
+
+    // It doesn't affect the underlying iterator.
+    assert_eq!("user.myattr", attrs.next().unwrap());
+
+    // An empty iterator produces the right value.
+    assert_eq!(r#"XAttrs([])"#, format!("{:?}", attrs));
+}
+
+#[test]
+#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
 fn test_multi() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.

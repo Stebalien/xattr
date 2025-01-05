@@ -8,7 +8,7 @@ use crate::UnsupportedPlatformError;
 pub const ENOATTR: i32 = 0;
 
 /// An iterator over a set of extended attributes names.
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Default)]
 pub struct XAttrs;
 
 impl Iterator for XAttrs {

@@ -88,20 +88,33 @@ fn test_missing() {
 #[test]
 #[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
 fn test_debug() {
+    use std::os::unix::ffi::OsStrExt;
+
     // Only works on "real" filesystems.
     let tmp = tempfile_in("/var/tmp").unwrap();
 
     tmp.set_xattr("user.myattr", b"value").unwrap();
     let mut attrs = tmp.list_xattr().unwrap();
 
-    // Debug is idempotent
-    assert_eq!(format!("{:?}", attrs), format!("{:?}", attrs));
+    let debugstr = format!("{:?}", attrs);
 
-    // It produces the right value.
-    assert_eq!(r#"XAttrs(["user.myattr"])"#, format!("{:?}", attrs));
+    // Debug is idempotent
+    assert_eq!(debugstr, format!("{:?}", attrs));
+
+    // It produces the right value. We can't just assert that it's equal to the expected value as
+    // the system may have added additional attributes (selinux, etc.). See #68.
+    assert!(debugstr.starts_with("XAttrs(["));
+    assert!(debugstr.ends_with("])"));
+    assert!(debugstr.contains(r#""user.myattr""#));
 
     // It doesn't affect the underlying iterator.
-    assert_eq!("user.myattr", attrs.next().unwrap());
+    assert_eq!(
+        "user.myattr",
+        attrs.find(|x| x.as_bytes().starts_with(b"user.")).unwrap()
+    );
+
+    // drain it.
+    let _ = attrs.by_ref().count();
 
     // An empty iterator produces the right value.
     assert_eq!(r#"XAttrs([])"#, format!("{:?}", attrs));

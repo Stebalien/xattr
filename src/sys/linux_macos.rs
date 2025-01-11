@@ -5,12 +5,11 @@ use std::os::unix::ffi::OsStrExt;
 use std::os::unix::io::BorrowedFd;
 use std::path::Path;
 
+use rustix::ffi::c_char;
 use rustix::fs as rfs;
 use rustix::path::Arg;
 
 use crate::util::allocate_loop;
-
-use std::os::raw::c_char;
 
 #[cfg(not(target_os = "macos"))]
 pub const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();

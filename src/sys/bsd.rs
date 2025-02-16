@@ -18,6 +18,7 @@ use libc::{
 use crate::util::allocate_loop;
 
 pub const ENOATTR: i32 = libc::ENOATTR;
+pub const ERANGE: i32 = libc::ERANGE;
 
 const EXTATTR_NAMESPACE_USER_STRING: &str = "user";
 const EXTATTR_NAMESPACE_SYSTEM_STRING: &str = "system";

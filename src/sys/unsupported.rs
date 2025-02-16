@@ -1,11 +1,12 @@
 use std::ffi::{OsStr, OsString};
 use std::io;
-use std::os::unix::io::BorrowedFd;
+use std::os::fd::BorrowedFd;
 use std::path::Path;
 
 use crate::UnsupportedPlatformError;
 
 pub const ENOATTR: i32 = 0;
+pub const ERANGE: i32 = 0;
 
 /// An iterator over a set of extended attributes names.
 #[derive(Clone, Default)]

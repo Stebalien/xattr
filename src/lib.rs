@@ -32,7 +32,7 @@ mod util;
 
 use std::ffi::OsStr;
 use std::fs::File;
-use std::os::unix::io::{AsRawFd, BorrowedFd};
+use std::os::fd::{AsRawFd, BorrowedFd};
 use std::path::Path;
 use std::{fmt, io};
 

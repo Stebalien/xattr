@@ -18,6 +18,8 @@ pub const ENOATTR: i32 = rustix::io::Errno::NODATA.raw_os_error();
 #[cfg(target_os = "macos")]
 pub const ENOATTR: i32 = rustix::io::Errno::NOATTR.raw_os_error();
 
+pub const ERANGE: i32 = rustix::io::Errno::RANGE.raw_os_error();
+
 // Convert an `&mut [u8]` to an `&mut [c_char]`
 #[inline]
 fn as_listxattr_buffer(buf: &mut [u8]) -> &mut [c_char] {

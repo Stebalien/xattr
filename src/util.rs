@@ -15,8 +15,6 @@ pub fn allocate_loop<E, F: FnMut(&mut [u8]) -> Result<usize, E>>(mut f: F) -> io
 where
     io::Error: From<E>,
 {
-    const ERANGE: i32 = rustix::io::Errno::RANGE.raw_os_error();
-
     let mut vec: Vec<u8> = Vec::new();
     loop {
         let ret = f(&mut [])?;
@@ -31,7 +29,7 @@ where
 
             Err(e) => {
                 let err: io::Error = e.into();
-                if err.raw_os_error() == Some(ERANGE) {
+                if err.raw_os_error() == Some(crate::sys::ERANGE) {
                     continue;
                 } else {
                     return Err(err);

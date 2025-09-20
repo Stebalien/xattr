@@ -5,7 +5,12 @@ use xattr::FileExt;
 use tempfile::{tempfile_in, NamedTempFile};
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_fd() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
@@ -41,7 +46,12 @@ fn test_fd() {
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_path() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
@@ -80,13 +90,23 @@ fn test_path() {
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_missing() {
     assert!(xattr::get("/var/empty/does-not-exist", "user.test").is_err());
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_debug() {
     use std::os::unix::ffi::OsStrExt;
 
@@ -121,7 +141,12 @@ fn test_debug() {
 }
 
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_multi() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
@@ -151,7 +176,12 @@ fn test_multi() {
 // Tests the deref API variants - regression test for
 // https://github.com/Stebalien/xattr/issues/57
 #[test]
-#[cfg(any(target_os = "linux", target_os = "freebsd", target_os = "macos"))]
+#[cfg(any(
+    target_os = "linux",
+    target_os = "freebsd",
+    target_os = "macos",
+    target_os = "android"
+))]
 fn test_path_deref() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.

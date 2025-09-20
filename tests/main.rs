@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::ffi::OsStr;
 use xattr::FileExt;
 
-use tempfile::{tempfile_in, NamedTempFile};
+use tempfile::{tempfile, NamedTempFile};
 
 #[test]
 #[cfg(any(
@@ -13,8 +13,7 @@ use tempfile::{tempfile_in, NamedTempFile};
 ))]
 fn test_fd() {
     use std::os::unix::ffi::OsStrExt;
-    // Only works on "real" filesystems.
-    let tmp = tempfile_in("/var/tmp").unwrap();
+    let tmp = tempfile().unwrap();
     assert!(tmp.get_xattr("user.test").unwrap().is_none());
     assert_eq!(
         tmp.list_xattr()
@@ -54,8 +53,7 @@ fn test_fd() {
 ))]
 fn test_path() {
     use std::os::unix::ffi::OsStrExt;
-    // Only works on "real" filesystems.
-    let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
+    let tmp = NamedTempFile::new().unwrap();
     assert!(xattr::get(tmp.path(), "user.test").unwrap().is_none());
     assert_eq!(
         xattr::list(tmp.path())
@@ -111,7 +109,7 @@ fn test_debug() {
     use std::os::unix::ffi::OsStrExt;
 
     // Only works on "real" filesystems.
-    let tmp = tempfile_in("/var/tmp").unwrap();
+    let tmp = tempfile().unwrap();
 
     tmp.set_xattr("user.myattr", b"value").unwrap();
     let mut attrs = tmp.list_xattr().unwrap();
@@ -150,7 +148,7 @@ fn test_debug() {
 fn test_multi() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
-    let tmp = tempfile_in("/var/tmp").unwrap();
+    let tmp = tempfile().unwrap();
     let mut items: BTreeSet<_> = [
         OsStr::new("user.test1"),
         OsStr::new("user.test2"),
@@ -185,7 +183,7 @@ fn test_multi() {
 fn test_path_deref() {
     use std::os::unix::ffi::OsStrExt;
     // Only works on "real" filesystems.
-    let tmp = NamedTempFile::new_in("/var/tmp").unwrap();
+    let tmp = NamedTempFile::new().unwrap();
     assert!(xattr::get_deref(tmp.path(), "user.test").unwrap().is_none());
     assert_eq!(
         xattr::list_deref(tmp.path())

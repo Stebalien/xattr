@@ -42,7 +42,12 @@ where
                     );
                     vec.set_len(len);
                 }
-                vec.shrink_to_fit();
+                // Only shrink to fit if we've over-allocated by MORE than one byte. Unfortunately,
+                // on FreeBSD, we have to over-allocate by one byte to determine if we've read all
+                // the attributes.
+                if vec.capacity() > vec.len() + 1 {
+                    vec.shrink_to_fit();
+                }
                 return Ok(vec);
             }
             Err(e) if e.raw_os_error() != Some(crate::sys::ERANGE) => return Err(e),

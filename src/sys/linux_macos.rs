@@ -1,6 +1,5 @@
 use std::ffi::{OsStr, OsString};
 use std::io;
-use std::mem;
 use std::os::unix::ffi::OsStrExt;
 use std::os::unix::io::BorrowedFd;
 use std::path::Path;

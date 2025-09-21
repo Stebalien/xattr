@@ -2,7 +2,7 @@
 
 use libc::{c_int, c_void, size_t, EPERM};
 use std::ffi::{CString, OsStr, OsString};
-use std::mem::{self, MaybeUninit};
+use std::mem::MaybeUninit;
 use std::os::unix::ffi::{OsStrExt, OsStringExt};
 use std::os::unix::io::{AsRawFd, BorrowedFd};
 use std::path::Path;

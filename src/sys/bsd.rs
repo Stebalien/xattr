@@ -179,11 +179,12 @@ fn name_to_ns(name: &OsStr) -> io::Result<(c_int, CString)> {
 }
 
 fn prefix_namespace(attr: &OsStr, ns: c_int) -> OsString {
-    let nsname = EXTATTR_NAMESPACE_NAMES[ns as usize];
-    let mut v = Vec::with_capacity(nsname.as_bytes().len() + attr.as_bytes().len() + 1);
-    v.extend(nsname.as_bytes());
-    v.extend(".".as_bytes());
-    v.extend(attr.as_bytes());
+    let nsname = EXTATTR_NAMESPACE_NAMES[ns as usize].as_bytes();
+    let attr = attr.as_bytes();
+    let mut v = Vec::with_capacity(nsname.len() + attr.len() + 1);
+    v.extend_from_slice(nsname);
+    v.extend_from_slice(b".");
+    v.extend_from_slice(attr);
     OsString::from_vec(v)
 }
 
@@ -241,13 +242,7 @@ pub fn list_fd(fd: BorrowedFd<'_>) -> io::Result<XAttrs> {
     };
 
     let uservec = unsafe {
-        let res = allocate_loop(|ptr, len| {
-            extattr_list_fd(fd.as_raw_fd(), EXTATTR_NAMESPACE_USER, ptr, len)
-        });
-        match res {
-            Ok(v) => v,
-            Err(err) => return Err(err),
-        }
+        allocate_loop(|ptr, len| extattr_list_fd(fd.as_raw_fd(), EXTATTR_NAMESPACE_USER, ptr, len))?
     };
 
     Ok(XAttrs {
@@ -337,13 +332,9 @@ pub fn list_path(path: &Path, deref: bool) -> io::Result<XAttrs> {
     };
 
     let uservec = unsafe {
-        let res = allocate_loop(|ptr, len| {
+        allocate_loop(|ptr, len| {
             extattr_list_func(path.as_ptr(), EXTATTR_NAMESPACE_USER, ptr, len)
-        });
-        match res {
-            Ok(v) => v,
-            Err(err) => return Err(err),
-        }
+        })?
     };
 
     Ok(XAttrs {

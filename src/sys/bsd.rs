@@ -56,13 +56,18 @@ fn allocate_loop<F: Fn(*mut c_void, size_t) -> libc::ssize_t>(f: F) -> io::Resul
         |buf| unsafe {
             let (ptr, len) = slice_parts(buf);
             let new_len = cvt(f(ptr, len))?;
-            assert!(
-                new_len <= len,
-                "OS returned length {new_len} greater than buffer size {len}"
-            );
-            Ok(slice::from_raw_parts_mut(ptr.cast(), new_len))
+            if new_len < len {
+                Ok(slice::from_raw_parts_mut(ptr.cast(), new_len))
+            } else {
+                // If the length of the value isn't strictly smaller than the length of the value
+                // read, there may be more to read. Fake an ERANGE error so we can try again with a
+                // bigger buffer.
+                Err(io::Error::from_raw_os_error(crate::sys::ERANGE))
+            }
         },
-        || cvt(f(ptr::null_mut(), 0)),
+        // Estimate size + 1 because, on freebsd, the only way to tell if we've read the entire
+        // value is read a value smaller than the buffer we passed.
+        || Ok(cvt(f(ptr::null_mut(), 0))? + 1),
     )
 }
 

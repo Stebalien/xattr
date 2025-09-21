@@ -67,33 +67,11 @@ fn allocate_loop<F: Fn(*mut c_void, size_t) -> libc::ssize_t>(f: F) -> io::Resul
 }
 
 /// An iterator over a set of extended attributes names.
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct XAttrs {
     user_attrs: Box<[u8]>,
     system_attrs: Box<[u8]>,
     offset: usize,
-}
-
-impl Clone for XAttrs {
-    fn clone(&self) -> Self {
-        XAttrs {
-            user_attrs: Vec::from(&*self.user_attrs).into_boxed_slice(),
-            system_attrs: Vec::from(&*self.system_attrs).into_boxed_slice(),
-            offset: self.offset,
-        }
-    }
-
-    fn clone_from(&mut self, other: &XAttrs) {
-        self.offset = other.offset;
-
-        let mut data = mem::replace(&mut self.user_attrs, Box::new([])).into_vec();
-        data.extend(other.user_attrs.iter().cloned());
-        self.user_attrs = data.into_boxed_slice();
-
-        data = mem::replace(&mut self.system_attrs, Box::new([])).into_vec();
-        data.extend(other.system_attrs.iter().cloned());
-        self.system_attrs = data.into_boxed_slice();
-    }
 }
 
 impl Iterator for XAttrs {

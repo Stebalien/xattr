@@ -1,7 +1,7 @@
 [package]
 name = "xattr"
 edition = "2021"
-version = "1.6.0"
+version = "1.6.1"
 authors = ["Steven Allen <steven@stebalien.com>"]
 description = "unix extended filesystem attributes"
 

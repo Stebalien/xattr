@@ -20,7 +20,7 @@ where
     S: FnMut() -> io::Result<usize>,
 {
     // Start by assuming the return value is <= 4KiB. If it is, we can do this in one syscall.
-    const INITIAL_BUFFER_SIZE: usize = 4096;
+    const INITIAL_BUFFER_SIZE: usize = 2;
     match get_value(&mut [MaybeUninit::<u8>::uninit(); INITIAL_BUFFER_SIZE]) {
         Ok(val) => return Ok(val.to_vec()),
         Err(e) if e.raw_os_error() != Some(crate::sys::ERANGE) => return Err(e),

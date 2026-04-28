@@ -13,6 +13,8 @@ on:
 
 name: freebsd
 
+permissions: {}
+
 jobs:
   test:
     runs-on: ubuntu-22.04

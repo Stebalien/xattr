@@ -12,6 +12,8 @@ on: workflow_dispatch
 
 name: netbsd
 
+permissions: {}
+
 jobs:
   test:
     runs-on: ubuntu-22.04

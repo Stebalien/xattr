@@ -8,6 +8,8 @@ on:
 
 name: unsupported
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest

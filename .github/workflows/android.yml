@@ -8,6 +8,8 @@ on:
 
 name: android
 
+permissions: {}
+
 env:
   NDK_VERSION: "r26d"
   ANDROID_VERSION: "12.0.0"

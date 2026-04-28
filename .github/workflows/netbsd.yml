@@ -16,9 +16,11 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      with:
+        persist-credentials: false
     - name: Run tests in NetBSD VM
-      uses: vmactions/netbsd-vm@v1
+      uses: vmactions/netbsd-vm@eb3ba840926911ccf17dc9de235335cb27a02ba0 # v1
       with:
         usesh: true
         prepare: |

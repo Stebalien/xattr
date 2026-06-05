@@ -1,0 +1,72 @@
+name: BSD
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions: {}
+
+jobs:
+  freebsd:
+    name: FreeBSD
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Run Tests
+        uses: vmactions/freebsd-vm@d1e65811565151536c0c894fff74f06351ed26e6 # v1.4.5
+        with:
+          usesh: true
+          sync: rsync
+          copyback: false
+          prepare: pkg install -y rust
+          run: |
+            cargo build
+            cargo test --tests
+  netbsd:
+    name: NetBSD
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Run Tests
+        uses: vmactions/netbsd-vm@ad31081832386a0ba569aee243e6edf9524f3f80 # v1.3.9
+        with:
+          usesh: true
+          sync: rsync
+          copyback: false
+          prepare: |
+            pkg_add rust
+            # We need to use a disk image that actually supports
+            # extended attributes.
+            dd if=/dev/zero of=/disk.img bs=1m count=100
+            vnconfig vnd0 /disk.img
+            newfs -O 2ea /dev/rvnd0a
+            mkdir /mnt/loop
+            mount /dev/vnd0a /mnt/loop
+          run: |
+            cargo build
+            TMPDIR=/mnt/loop cargo test --tests
+  midnight:
+    name: MidnightBSD
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Run Tests
+        uses: vmactions/midnightbsd-vm@bcb8f9f26cc75da3afb3610e3bb2a95018cdb199 # v1.0.2
+        with:
+          usesh: true
+          sync: rsync
+          copyback: false
+          prepare: mport --quiet install rust >/dev/null || true
+          run: |
+            cargo build
+            cargo test --tests

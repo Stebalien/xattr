@@ -1,0 +1,27 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+name: haiku
+
+permissions: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      with:
+        persist-credentials: false
+    - name: Run tests in Haiku VM
+      uses: vmactions/haiku-vm@44bec668b3e6e67ef4958ad3897730225a3123cf # v1.1.0
+      with:
+        usesh: true
+        prepare: pkgman install -y rust_bin
+        run: |
+          cargo build
+          cargo test

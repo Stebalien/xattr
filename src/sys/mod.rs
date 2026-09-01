@@ -29,6 +29,6 @@ macro_rules! platforms {
 }
 
 platforms! {
-    "android"; "linux"; "macos"; "hurd" => linux_macos,
+    "android"; "linux"; "macos"; "hurd"; "haiku" => linux_macos,
     "freebsd"; "netbsd" => bsd
 }

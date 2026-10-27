@@ -30,9 +30,7 @@ where
     // If that fails, we ask for the size and try again with a buffer of the correct size.
     let mut vec: Vec<u8> = Vec::new();
     loop {
-        let size = get_size()?;
-        vec.reserve_exact(size);
-        eprintln!("size: {size}, capacity: {}", vec.capacity());
+        vec.reserve_exact(get_size()?);
         match get_value(vec.spare_capacity_mut()) {
             Ok(initialized) => {
                 unsafe {

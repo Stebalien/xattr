@@ -178,7 +178,7 @@ fn test_large() {
     {
         assert!(items.remove(&*it));
     }
-    assert!(items.is_empty(), "remaining attributes: {items:?}");
+    assert!(items.is_empty());
 }
 
 // Tests the deref API variants - regression test for

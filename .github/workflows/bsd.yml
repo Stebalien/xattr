@@ -61,7 +61,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Run Tests
-        uses: vmactions/midnightbsd-vm@1629088a95a63a7273cf57603b13e5e247417549 # v1.0.4
+        uses: vmactions/midnightbsd-vm@9a256e5bd9e476e1ac159fa26b997595326ba3a0 # v1.0.5
         with:
           usesh: true
           sync: rsync

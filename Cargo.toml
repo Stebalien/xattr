@@ -10,6 +10,7 @@ repository = "https://github.com/Stebalien/xattr"
 keywords = ["xattr", "filesystem", "unix"]
 license = "MIT OR Apache-2.0"
 include = ["README.md", "LICENSE-*", "Cargo.toml", "src/**/*.rs", "tests/**/*.rs"]
+rust-version = "1.65"
 
 [features]
 default = ["unsupported"]

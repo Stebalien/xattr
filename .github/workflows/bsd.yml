@@ -66,7 +66,13 @@ jobs:
           usesh: true
           sync: rsync
           copyback: false
-          prepare: mport --quiet install rust >/dev/null || true
+          prepare: |
+            for i in 1 2 3 4 5; do
+              mport --quiet install rust >/dev/null || true
+              command -v cargo >/dev/null && break
+              sleep 10
+            done
+            command -v cargo >/dev/null
           run: |
             cargo build
             cargo test --tests

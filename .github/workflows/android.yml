@@ -40,7 +40,8 @@ jobs:
         echo "ANDROID_NDK_ROOT=$NDK_DIR" >> $GITHUB_ENV
 
         # Setup & start redroid container
-        sudo apt-get install -y linux-modules-extra-$(uname -r) android-tools-adb
+        sudo apt-get update
+        sudo apt-get install -y android-tools-adb
         sudo modprobe binder_linux devices=binder,hwbinder,vndbinder
 
         docker run -itd --rm --privileged \

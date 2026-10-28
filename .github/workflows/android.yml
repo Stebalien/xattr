@@ -41,7 +41,11 @@ jobs:
 
         # Setup & start redroid container
         sudo apt-get update
-        sudo apt-get install -y linux-modules-extra-$(uname -r) android-tools-adb
+        sudo apt-get install -y android-tools-adb
+        KERNEL_MODULES_PACKAGE="linux-modules-extra-$(uname -r)"
+        if apt-cache show "$KERNEL_MODULES_PACKAGE" >/dev/null 2>&1; then
+          sudo apt-get install -y "$KERNEL_MODULES_PACKAGE"
+        fi
         sudo modprobe binder_linux devices=binder,hwbinder,vndbinder
 
         docker run -itd --rm --privileged \
